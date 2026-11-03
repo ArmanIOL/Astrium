@@ -119,8 +119,7 @@ template $EphyLocationEntry: Box {
         factory: BuilderListItemFactory {
           template ListItem {
             child: Grid {
-              column-spacing: 6;
-              row-spacing: 3;
+              column-spacing: 8;
 
               GestureClick {
                 button: 1;
@@ -158,18 +157,17 @@ template $EphyLocationEntry: Box {
                 ellipsize: end;
                 xalign: 0;
                 single-line-mode: true;
-                hexpand: true;
                 label: bind template.item as <$EphySuggestion>.subtitle;
                 visible: bind $suggestion_has_subtitle(template.item as <$EphySuggestion>.subtitle);
 
                 layout {
-                  column: "1";
-                  row: "1";
+                  column: "2";
+                  row: "0";
                 }
 
                 styles [
                   "dim-label",
-                  "caption",
+                  "astrium-suggestion-url",
                 ]
               }
 
@@ -180,7 +178,7 @@ template $EphyLocationEntry: Box {
                 ) as <Gio.Icon>;
 
                 layout {
-                  column: "2";
+                  column: "3";
                   row: "0";
                 }
               }

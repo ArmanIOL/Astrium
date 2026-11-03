@@ -49,6 +49,7 @@ libephymain_sources = [
   'ephy-shell.c',
   'ephy-site-menu-button.c',
   'ephy-suggestion-model.c',
+  'ephy-tab-strip.c',
   'ephy-tab-view.c',
   'ephy-title-box.c',
   'ephy-title-widget.c',

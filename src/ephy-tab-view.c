@@ -33,7 +33,7 @@ struct _EphyTabView {
   AdwBin parent_instance;
 
   AdwTabView *tab_view;
-  AdwTabBar *tab_bar;
+  EphyTabStrip *tab_strip;
   AdwTabOverview *tab_overview;
   AdwTabPage *current_page;
 };
@@ -574,9 +574,9 @@ visibility_policy_changed_cb (EphyTabView *self)
     policy = g_settings_get_enum (EPHY_SETTINGS_UI,
                                   EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
 
-  adw_tab_bar_set_autohide (self->tab_bar,
+  ephy_tab_strip_set_autohide (self->tab_strip,
                             policy != EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS);
-  gtk_widget_set_visible (GTK_WIDGET (self->tab_bar),
+  gtk_widget_set_visible (GTK_WIDGET (self->tab_strip),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
                           policy != EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_NEVER);
 }
@@ -587,7 +587,7 @@ expand_changed_cb (EphyTabView *self)
   gboolean expand = g_settings_get_boolean (EPHY_SETTINGS_UI,
                                             EPHY_PREFS_UI_EXPAND_TABS_BAR);
 
-  adw_tab_bar_set_expand_tabs (self->tab_bar, expand);
+  ephy_tab_strip_set_expand_tabs (self->tab_strip, expand);
 }
 
 static gboolean
@@ -614,36 +614,38 @@ notify_decoration_layout_cb (EphyTabView *self)
 {
   gboolean inverted = is_layout_reversed ();
 
-  if (self->tab_bar)
-    adw_tab_bar_set_inverted (self->tab_bar, inverted);
+  if (self->tab_strip)
+    ephy_tab_strip_set_inverted (self->tab_strip, inverted);
 
   if (self->tab_overview)
     adw_tab_overview_set_inverted (self->tab_overview, inverted);
 }
 
 void
-ephy_tab_view_set_tab_bar (EphyTabView *self,
-                           AdwTabBar   *tab_bar)
+ephy_tab_view_set_tab_strip (EphyTabView  *self,
+                             EphyTabStrip *tab_strip)
 {
   GtkSettings *settings;
 
-  self->tab_bar = tab_bar;
+  self->tab_strip = tab_strip;
 
-  adw_tab_bar_setup_extra_drop_target (tab_bar, GDK_ACTION_COPY, (GType[3]) {
+  ephy_tab_strip_set_tab_view (tab_strip, self->tab_view);
+
+  ephy_tab_strip_setup_extra_drop_target (tab_strip, GDK_ACTION_COPY, (GType[3]) {
     G_TYPE_STRING,
     G_TYPE_FILE,
     GDK_TYPE_FILE_LIST,
   }, 3);
 
-  g_signal_connect_object (tab_bar, "extra-drag-drop",
+  g_signal_connect_object (tab_strip, "extra-drag-drop",
                            G_CALLBACK (drag_drop_cb), self,
                            G_CONNECT_SWAPPED);
 
   if (is_desktop_pantheon ()) {
     GtkWidget *button;
 
-    adw_tab_bar_set_autohide (tab_bar, FALSE);
-    adw_tab_bar_set_expand_tabs (tab_bar, FALSE);
+    ephy_tab_strip_set_autohide (tab_strip, FALSE);
+    ephy_tab_strip_set_expand_tabs (tab_strip, FALSE);
 
     button = gtk_button_new_from_icon_name ("list-add-symbolic");
     /* Translators: tooltip for the new tab button */
@@ -651,7 +653,7 @@ ephy_tab_view_set_tab_bar (EphyTabView *self,
     gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
     gtk_widget_add_css_class (button, "flat");
 
-    adw_tab_bar_set_start_action_widget (tab_bar, button);
+    ephy_tab_strip_set_start_action_widget (tab_strip, button);
   } else {
     g_signal_connect_object (EPHY_SETTINGS_UI,
                              "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,

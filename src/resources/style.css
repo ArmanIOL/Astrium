@@ -143,39 +143,45 @@ tabbar .end-action > revealer > menubutton:dir(rtl) {
 }
 
 popover.suggestions {
-  padding-top: 6px;
+  padding: 6px;
 
   /* Match entries */
-  padding-left: 9px;
-  padding-right: 9px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 popover.suggestions listview > row {
   padding: 0;
+  border-radius: 6px;
+  min-height: 34px;
 }
 
 popover.suggestions listview > row > grid {
-  padding: 9px 12px;
+  padding: 7px 10px;
+}
+
+.astrium-suggestion-url {
+  opacity: 0.7;
 }
 
 popover.suggestions listview > row:hover {
-  background-color: alpha(currentColor, .04);
+  background-color: alpha(currentColor, .06);
 }
 
 popover.suggestions listview > row:active {
-  background-color: alpha(currentColor, .08);
-}
-
-popover.suggestions listview > row:selected {
   background-color: alpha(currentColor, .1);
 }
 
+popover.suggestions listview > row:selected {
+  background-color: alpha(currentColor, .12);
+}
+
 popover.suggestions listview > row:selected:hover {
-  background-color: alpha(currentColor, .13);
+  background-color: alpha(currentColor, .15);
 }
 
 popover.suggestions listview > row:selected:active {
-  background-color: alpha(currentColor, .19);
+  background-color: alpha(currentColor, .2);
 }
 
 @media (prefers-contrast: more) {
@@ -271,4 +277,94 @@ dnd > .boxed-list {
 .progress-indicator {
   margin-left: 6px;
   margin-right: 6px;
+}
+
+/* Chrome-like tab strip */
+
+.astrium-tab-strip {
+  background: transparent;
+  padding: 4px 4px 0;
+}
+
+.astrium-tab {
+  min-height: 32px;
+  border-radius: 8px 8px 0 0;
+  margin: 0 1px;
+  background: alpha(@window_fg_color, 0.04);
+  box-shadow: inset 0 0 0 1px alpha(@window_fg_color, 0.06);
+  color: alpha(@window_fg_color, 0.8);
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+
+.astrium-tab:hover {
+  background: alpha(@window_fg_color, 0.09);
+  color: @window_fg_color;
+}
+
+.astrium-tab.active {
+  background: @headerbar_bg_color;
+  color: @headerbar_fg_color;
+  box-shadow: inset 0 0 0 1px alpha(@window_fg_color, 0.10);
+}
+
+.astrium-tab.active:backdrop {
+  color: alpha(@headerbar_fg_color, 0.7);
+}
+
+.astrium-tab.pinned {
+  min-width: 44px;
+}
+
+.astrium-tab.needs-attention > box > label {
+  color: @accent_color;
+  font-weight: bold;
+}
+
+.astrium-tab .astrium-tab-close {
+  min-width: 20px;
+  min-height: 20px;
+  padding: 2px;
+  margin: 0;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 150ms ease-out, background 150ms ease-out;
+}
+
+.astrium-tab:hover .astrium-tab-close,
+.astrium-tab.active .astrium-tab-close,
+.astrium-tab:focus-within .astrium-tab-close {
+  opacity: 1;
+}
+
+.astrium-tab .astrium-tab-close:hover {
+  background: alpha(@window_fg_color, 0.12);
+}
+
+.astrium-tab-strip-button {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  margin: 4px 2px;
+  border-radius: 6px;
+}
+
+/* Chrome-like tab search popover */
+
+.astrium-tab-search {
+  padding: 0;
+}
+
+.astrium-tab-search-row {
+  min-height: 40px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.astrium-tab-search-row:hover {
+  background: alpha(@window_fg_color, 0.08);
+}
+
+.astrium-tab-search-row image {
+  opacity: 0.9;
 }

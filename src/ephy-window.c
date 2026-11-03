@@ -158,7 +158,7 @@ struct _EphyWindow {
   GtkWidget *header_bar;
   GHashTable *action_labels;
   EphyTabView *tab_view;
-  AdwTabBar *tab_bar;
+  EphyTabStrip *tab_bar;
   GtkWidget *action_bar_revealer;
   GtkWidget *action_bar;
   GtkWidget *overlay_split_view;
@@ -4636,9 +4636,9 @@ ephy_window_constructed (GObject *object)
   }
 
   window->tab_view = setup_tab_view (window);
-  window->tab_bar = adw_tab_bar_new ();
+  window->tab_bar = ephy_tab_strip_new ();
 
-  adw_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
+  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar), TRUE);
   adw_tab_overview_set_view (ADW_TAB_OVERVIEW (window->overview), ephy_tab_view_get_tab_view (window->tab_view));
 
   shell = ephy_shell_get_default ();
@@ -4679,7 +4679,7 @@ ephy_window_constructed (GObject *object)
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar_revealer);
 
-  ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
+  ephy_tab_view_set_tab_strip (window->tab_view, window->tab_bar);
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
 
   /* other notifiers */
