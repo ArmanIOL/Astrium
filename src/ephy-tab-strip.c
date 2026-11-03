@@ -32,6 +32,8 @@
 #define MAX_TAB_WIDTH 240
 #define PINNED_TAB_WIDTH 44
 #define DRAG_THRESHOLD 4
+#define TAB_CLOSE_VISIBLE_WIDTH 80
+#define TAB_LABEL_VISIBLE_WIDTH 54
 
 struct _EphyTabStrip {
   AdwBin parent_instance;
@@ -191,15 +193,176 @@ update_tab_contents (EphyTabStrip *self,
   }
 }
 
+/* Tab */
+
+/* A tab keeps its content in a box and has a width assigned by the strip.
+ * A widget that has a layout manager is sized by that manager, so the tab
+ * gets its own manager: it reports the width assigned by the strip, which
+ * is what keeps a long page title from making its tab wider than the
+ * others. */
+
+G_DECLARE_FINAL_TYPE (EphyTab, ephy_tab, EPHY, TAB, GtkWidget)
+
+#define EPHY_TYPE_TAB (ephy_tab_get_type ())
+
+struct _EphyTab {
+  GtkWidget parent_instance;
+
+  GtkWidget *box;
+  int fixed_width;
+};
+
+G_DEFINE_FINAL_TYPE (EphyTab, ephy_tab, GTK_TYPE_WIDGET)
+
+G_DECLARE_FINAL_TYPE (EphyTabLayout, ephy_tab_layout, EPHY, TAB_LAYOUT, GtkLayoutManager)
+
+#define EPHY_TYPE_TAB_LAYOUT (ephy_tab_layout_get_type ())
+
+struct _EphyTabLayout {
+  GtkLayoutManager parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE (EphyTabLayout, ephy_tab_layout, GTK_TYPE_LAYOUT_MANAGER)
+
+static GtkSizeRequestMode
+ephy_tab_layout_get_request_mode (GtkLayoutManager *manager,
+                                  GtkWidget        *widget)
+{
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
+ephy_tab_layout_measure (GtkLayoutManager *manager,
+                         GtkWidget        *widget,
+                         GtkOrientation    orientation,
+                         int               for_size,
+                         int              *minimum,
+                         int              *natural,
+                         int              *minimum_baseline,
+                         int              *natural_baseline)
+{
+  EphyTab *tab = EPHY_TAB (widget);
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && tab->fixed_width > 0) {
+    *minimum = *natural = tab->fixed_width;
+  } else if (child) {
+    int child_for_size = -1;
+
+    if (orientation == GTK_ORIENTATION_VERTICAL && tab->fixed_width > 0) {
+      int child_minimum = 0, child_natural = 0;
+
+      /* The tab can be narrower than its content minimum when many tabs are
+       * open. Asking for the height at such a width makes GtkBox warn, so
+       * measure at least at its minimum width. */
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_minimum, &child_natural, NULL, NULL);
+      child_for_size = MAX (tab->fixed_width, child_minimum);
+    }
+
+    gtk_widget_measure (child, orientation, child_for_size,
+                        minimum, natural, minimum_baseline, natural_baseline);
+  } else {
+    *minimum = *natural = 0;
+  }
+}
+
+static void
+ephy_tab_layout_allocate (GtkLayoutManager *manager,
+                          GtkWidget        *widget,
+                          int               width,
+                          int               height,
+                          int               baseline)
+{
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (child) {
+    int minimum = 0, natural = 0;
+
+    /* A tab may be narrower than its content when many tabs are open. GTK
+     * warns when it has to measure a box for a width it cannot fit into, so
+     * give the content at least its minimum width and clip the overflow. */
+    gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
+                        &minimum, &natural, NULL, NULL);
+
+    gtk_widget_allocate (child, MAX (width, minimum), height, baseline, NULL);
+  }
+}
+
+static void
+ephy_tab_layout_class_init (EphyTabLayoutClass *klass)
+{
+  GtkLayoutManagerClass *manager_class = GTK_LAYOUT_MANAGER_CLASS (klass);
+
+  manager_class->get_request_mode = ephy_tab_layout_get_request_mode;
+  manager_class->measure = ephy_tab_layout_measure;
+  manager_class->allocate = ephy_tab_layout_allocate;
+}
+
+static void
+ephy_tab_layout_init (EphyTabLayout *self)
+{
+}
+
+static void
+ephy_tab_dispose (GObject *object)
+{
+  EphyTab *self = EPHY_TAB (object);
+
+  g_clear_pointer (&self->box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (ephy_tab_parent_class)->dispose (object);
+}
+
+static void
+ephy_tab_class_init (EphyTabClass *klass)
+{
+  G_OBJECT_CLASS (klass)->dispose = ephy_tab_dispose;
+}
+
+static void
+ephy_tab_init (EphyTab *self)
+{
+  gtk_widget_set_layout_manager (GTK_WIDGET (self),
+                                 g_object_new (EPHY_TYPE_TAB_LAYOUT, NULL));
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+}
+
+static GtkWidget *
+ephy_tab_new (void)
+{
+  return g_object_new (EPHY_TYPE_TAB, NULL);
+}
+
+static void
+ephy_tab_set_content (EphyTab   *self,
+                      GtkWidget *box)
+{
+  g_assert (self->box == NULL);
+
+  self->box = box;
+  gtk_widget_set_parent (box, GTK_WIDGET (self));
+}
+
+static void
+ephy_tab_set_fixed_width (EphyTab *self,
+                          int      width)
+{
+  if (self->fixed_width == width)
+    return;
+
+  self->fixed_width = width;
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
 /* Sizing */
 
 static void
-update_tab_widths (EphyTabStrip *self)
+update_tab_widths (EphyTabStrip *self,
+                   int           strip_width)
 {
-  int available, width, fixed_width;
+  int available, fixed_width, slot, extra, n;
   guint n_tabs = 0, n_pinned = 0, n_normal, i;
-  GHashTableIter iter;
-  gpointer key, value;
 
   if (self->updating_widths || !self->view || !self->scrolled_window)
     return;
@@ -224,30 +387,50 @@ update_tab_widths (EphyTabStrip *self)
                   + gtk_widget_get_width (self->window_controls)
                   + 4 * 4; /* box spacing */
 
-    available = gtk_widget_get_width (GTK_WIDGET (self)) - fixed_width;
+    if (self->start_action_widget)
+      fixed_width += gtk_widget_get_width (self->start_action_widget) + 4;
+
+    available = strip_width - fixed_width;
     available -= n_pinned * (PINNED_TAB_WIDTH + 2);
 
     if (available <= 0)
       return;
 
-    width = available / n_normal - 2;
-    width = CLAMP (width, MIN_TAB_WIDTH, MAX_TAB_WIDTH);
+    slot = available / n_normal;
+    extra = available % n_normal;
   } else {
-    width = MAX_TAB_WIDTH;
+    slot = MAX_TAB_WIDTH + 2;
+    extra = 0;
   }
 
   self->updating_widths = TRUE;
 
-  g_hash_table_iter_init (&iter, self->tabs);
-  while (g_hash_table_iter_next (&iter, &key, &value)) {
-    AdwTabPage *page = key;
-    GtkWidget *tab = value;
-    int tab_width = adw_tab_page_get_pinned (page) ? PINNED_TAB_WIDTH : width;
-    int current_width = -1, current_height = -1;
+  n = 0;
+  for (i = 0; i < n_tabs; i++) {
+    AdwTabPage *page = adw_tab_view_get_nth_page (self->view, i);
+    GtkWidget *tab = g_hash_table_lookup (self->tabs, page);
+    int tab_width;
 
-    gtk_widget_get_size_request (tab, &current_width, &current_height);
-    if (current_width != tab_width)
-      gtk_widget_set_size_request (tab, tab_width, -1);
+    if (!tab)
+      continue;
+
+    if (adw_tab_page_get_pinned (page)) {
+      tab_width = PINNED_TAB_WIDTH;
+    } else {
+      tab_width = slot + (n < extra ? 1 : 0) - 2;
+      tab_width = CLAMP (tab_width, MIN_TAB_WIDTH, MAX_TAB_WIDTH);
+      n++;
+    }
+
+    ephy_tab_set_fixed_width (EPHY_TAB (tab), tab_width);
+
+    /* Chrome drops the title and close button when tabs get too narrow. */
+    gtk_widget_set_visible (GTK_WIDGET (g_object_get_data (G_OBJECT (tab), "close")),
+                            tab_width >= TAB_CLOSE_VISIBLE_WIDTH);
+    gtk_widget_set_visible (GTK_WIDGET (g_object_get_data (G_OBJECT (tab), "label")),
+                            tab_width >= TAB_LABEL_VISIBLE_WIDTH);
+    gtk_widget_set_halign (GTK_WIDGET (g_object_get_data (G_OBJECT (tab), "box")),
+                           tab_width >= TAB_LABEL_VISIBLE_WIDTH ? GTK_ALIGN_FILL : GTK_ALIGN_CENTER);
   }
 
   self->updating_widths = FALSE;
@@ -263,7 +446,7 @@ ephy_tab_strip_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (ephy_tab_strip_parent_class)->size_allocate (widget, width, height, baseline);
 
-  update_tab_widths (self);
+  update_tab_widths (self, width);
 }
 
 /* Tab search */
@@ -636,16 +819,17 @@ create_tab (EphyTabStrip *self,
   GtkEventController *key_controller;
   g_autoptr (GIcon) icon = NULL;
 
-  tab = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  tab = ephy_tab_new ();
   gtk_widget_add_css_class (tab, "astrium-tab");
   gtk_widget_set_can_focus (tab, TRUE);
   gtk_widget_set_valign (tab, GTK_ALIGN_FILL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+  gtk_widget_set_hexpand (box, TRUE);
   gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
   gtk_widget_set_margin_start (box, 10);
   gtk_widget_set_margin_end (box, 6);
-  gtk_box_append (GTK_BOX (tab), box);
+  ephy_tab_set_content (EPHY_TAB (tab), box);
 
   stack = gtk_stack_new ();
   gtk_widget_set_valign (stack, GTK_ALIGN_CENTER);
@@ -677,6 +861,7 @@ create_tab (EphyTabStrip *self,
   gtk_widget_set_tooltip_text (close_button, _("Close tab"));
   gtk_box_append (GTK_BOX (box), close_button);
 
+  g_object_set_data (G_OBJECT (tab), "box", box);
   g_object_set_data (G_OBJECT (tab), "stack", stack);
   g_object_set_data (G_OBJECT (tab), "image", image);
   g_object_set_data (G_OBJECT (tab), "spinner", spinner);
@@ -823,7 +1008,7 @@ rebuild (EphyTabStrip *self)
       gtk_box_append (GTK_BOX (self->tabs_box), g_ptr_array_index (ordered, i));
   }
 
-  update_tab_widths (self);
+  update_tab_widths (self, gtk_widget_get_width (GTK_WIDGET (self)));
 
   if (self->search_popover && gtk_widget_get_visible (self->search_popover))
     search_list_populate (self);
@@ -845,12 +1030,6 @@ static void
 n_pages_changed_cb (EphyTabStrip *self)
 {
   rebuild (self);
-}
-
-static void
-adjustment_changed_cb (EphyTabStrip *self)
-{
-  update_tab_widths (self);
 }
 
 /* GObject */
@@ -889,7 +1068,6 @@ static void
 ephy_tab_strip_init (EphyTabStrip *self)
 {
   GtkWidget *plus_button, *spacer;
-  GtkAdjustment *adjustment;
   GtkWidget *search_box, *scrolled, *margin_box;
 
   self->tabs = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
@@ -914,9 +1092,6 @@ ephy_tab_strip_init (EphyTabStrip *self)
   self->tabs_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_valign (self->tabs_box, GTK_ALIGN_FILL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (self->scrolled_window), self->tabs_box);
-
-  adjustment = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (self->scrolled_window));
-  g_signal_connect_object (adjustment, "changed", G_CALLBACK (adjustment_changed_cb), self, G_CONNECT_SWAPPED);
 
   plus_button = gtk_button_new_from_icon_name ("list-add-symbolic");
   gtk_widget_add_css_class (plus_button, "flat");
@@ -1056,7 +1231,7 @@ ephy_tab_strip_set_expand_tabs (EphyTabStrip *self,
     return;
 
   self->expand = expand;
-  update_tab_widths (self);
+  update_tab_widths (self, gtk_widget_get_width (GTK_WIDGET (self)));
 }
 
 void

@@ -5046,6 +5046,15 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Включить"
 
+msgid "Close tab"
+msgstr "Закрыть вкладку"
+
+msgid "Search tabs"
+msgstr "Поиск вкладок"
+
+msgid "Untitled"
+msgstr "Без названия"
+
 #~ msgid "The password of your Mozilla account seems to have been changed."
 #~ msgstr "Похоже, пароль вашей учётной записи Mozilla был изменён."
 
