@@ -524,7 +524,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyWindow, ephy_window, ADW_TYPE_APPLICATION_WIN
 static void
 sync_chromes_visibility (EphyWindow *window)
 {
-  gboolean show_tabsbar, is_wide, fullscreen, fullscreen_lockdown;
+  gboolean show_tabsbar, is_wide, fullscreen, fullscreen_lockdown, tabs_visible;
 
   if (window->closing)
     return;
@@ -539,10 +539,12 @@ sync_chromes_visibility (EphyWindow *window)
   gtk_widget_set_visible (GTK_WIDGET (window->header_bar),
                           !fullscreen_lockdown &&
                           (!fullscreen || window->show_fullscreen_header_bar));
-  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar),
-                          !fullscreen_lockdown &&
-                          (show_tabsbar && is_wide && !(window->is_popup) &&
-                           (!fullscreen || window->show_fullscreen_header_bar)));
+  tabs_visible = !fullscreen_lockdown &&
+                 (show_tabsbar && is_wide && !(window->is_popup) &&
+                  (!fullscreen || window->show_fullscreen_header_bar));
+  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar), tabs_visible);
+  if (window->header_bar)
+    ephy_header_bar_set_show_end_title_buttons (EPHY_HEADER_BAR (window->header_bar), !tabs_visible);
   gtk_widget_set_visible (GTK_WIDGET (window->action_bar),
                           !fullscreen_lockdown && !is_wide &&
                           (!fullscreen || window->show_fullscreen_header_bar));
@@ -4672,11 +4674,11 @@ ephy_window_constructed (GObject *object)
   ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
   window->header_bin_top = adw_bin_new ();
   adw_bin_set_child (ADW_BIN (window->header_bin_top), window->header_bar);
+  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bin_top));
   window->header_bin_bottom = adw_bin_new ();
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, GTK_WIDGET (window->header_bin_bottom));
 
-  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar_revealer);
 
   ephy_tab_view_set_tab_strip (window->tab_view, window->tab_bar);

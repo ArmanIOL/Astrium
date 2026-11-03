@@ -40,6 +40,8 @@ GtkWidget          *ephy_header_bar_get_page_menu_button           (EphyHeaderBa
 EphyWindow         *ephy_header_bar_get_window                     (EphyHeaderBar *header_bar);
 EphyActionBarStart *ephy_header_bar_get_action_bar_start           (EphyHeaderBar *header_bar);
 EphyActionBarEnd   *ephy_header_bar_get_action_bar_end             (EphyHeaderBar *header_bar);
+void                ephy_header_bar_set_show_end_title_buttons    (EphyHeaderBar    *header_bar,
+                                                                  gboolean          show);
 void                ephy_header_bar_set_adaptive_mode              (EphyHeaderBar    *header_bar,
                                                                     EphyAdaptiveMode  adaptive_mode);
 

@@ -128,7 +128,6 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
   g_object_get (header_bar->window, "fullscreened", &fullscreen, NULL);
 
   adw_header_bar_set_show_start_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), !fullscreen);
-  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), !fullscreen);
   gtk_widget_set_visible (header_bar->restore_button, fullscreen);
 
   if (fullscreen) {
@@ -148,6 +147,8 @@ ephy_header_bar_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
+  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), FALSE);
+
   g_signal_connect_object (header_bar->window, "notify::chrome",
                            G_CALLBACK (sync_chromes_visibility), header_bar,
                            G_CONNECT_SWAPPED);
@@ -161,24 +162,10 @@ ephy_header_bar_constructed (GObject *object)
   else
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
-  if (is_desktop_pantheon ()) {
-    /* Use a full-width entry on Pantheon */
-    gtk_widget_set_hexpand (GTK_WIDGET (header_bar->title_widget), TRUE);
-    gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 6);
-    gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 6);
-
-    adw_bin_set_child (ADW_BIN (header_bar->event_box), GTK_WIDGET (header_bar->title_widget));
-  } else {
-    GtkWidget *clamp;
-
-    clamp = adw_clamp_new ();
-    gtk_widget_set_hexpand (GTK_WIDGET (clamp), TRUE);
-    adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 860);
-    adw_clamp_set_tightening_threshold (ADW_CLAMP (clamp), 560);
-    adw_clamp_set_child (ADW_CLAMP (clamp), GTK_WIDGET (header_bar->title_widget));
-
-    adw_bin_set_child (ADW_BIN (header_bar->event_box), clamp);
-  }
+  gtk_widget_set_hexpand (GTK_WIDGET (header_bar->title_widget), TRUE);
+  gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 8);
+  gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 8);
+  adw_bin_set_child (ADW_BIN (header_bar->event_box), GTK_WIDGET (header_bar->title_widget));
 
   /* Sync the size of placeholder in EphyActionBarStart with downloads button */
   downloads_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -284,6 +271,13 @@ ephy_header_bar_get_action_bar_end (EphyHeaderBar *header_bar)
 }
 
 void
+ephy_header_bar_set_show_end_title_buttons (EphyHeaderBar *header_bar,
+                                            gboolean       show)
+{
+  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), show);
+}
+
+void
 ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
@@ -292,15 +286,11 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), TRUE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), TRUE);
       gtk_widget_set_visible (header_bar->page_menu_button, TRUE);
-      adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), TRUE);
-
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), FALSE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), FALSE);
       gtk_widget_set_visible (header_bar->page_menu_button, FALSE);
-      adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), FALSE);
-
       break;
   }
 

@@ -39,11 +39,13 @@ struct _EphyTabStrip {
   AdwTabView *view;
 
   GtkWidget *box;
+  GtkWidget *window_handle;
   GtkWidget *start_action_widget;
   GtkWidget *scrolled_window;
   GtkWidget *tabs_box;
   GtkWidget *new_tab_button;
   GtkWidget *tab_search_button;
+  GtkWidget *window_controls;
   GtkWidget *search_popover;
   GtkWidget *search_entry;
   GtkWidget *search_list;
@@ -70,6 +72,7 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 static void rebuild (EphyTabStrip *self);
+static void root_changed_cb (EphyTabStrip *self);
 
 /* Helpers */
 
@@ -614,10 +617,10 @@ create_tab (EphyTabStrip *self,
   tab = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_add_css_class (tab, "astrium-tab");
   gtk_widget_set_can_focus (tab, TRUE);
-  gtk_widget_set_valign (tab, GTK_ALIGN_END);
+  gtk_widget_set_valign (tab, GTK_ALIGN_FILL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_widget_set_valign (box, GTK_ALIGN_END);
+  gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
   gtk_widget_set_margin_start (box, 10);
   gtk_widget_set_margin_end (box, 6);
   gtk_box_append (GTK_BOX (tab), box);
@@ -800,9 +803,6 @@ rebuild (EphyTabStrip *self)
 
   update_tab_widths (self);
 
-  if (self->autohide)
-    gtk_widget_set_visible (GTK_WIDGET (self), n_pages > 1);
-
   if (self->search_popover && gtk_widget_get_visible (self->search_popover))
     search_list_populate (self);
 }
@@ -873,17 +873,21 @@ ephy_tab_strip_init (EphyTabStrip *self)
 
   self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_add_css_class (self->box, "astrium-tab-strip");
-  gtk_widget_set_valign (self->box, GTK_ALIGN_END);
+  gtk_widget_set_valign (self->box, GTK_ALIGN_FILL);
+
+  self->window_handle = gtk_window_handle_new ();
+  gtk_window_handle_set_child (GTK_WINDOW_HANDLE (self->window_handle), self->box);
 
   self->scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (self->scrolled_window),
                                   GTK_POLICY_EXTERNAL, GTK_POLICY_NEVER);
   gtk_widget_set_hexpand (self->scrolled_window, TRUE);
-  gtk_widget_set_valign (self->scrolled_window, GTK_ALIGN_END);
+  gtk_widget_set_valign (self->scrolled_window, GTK_ALIGN_FILL);
+  gtk_widget_set_margin_start (self->scrolled_window, 8);
   gtk_box_append (GTK_BOX (self->box), self->scrolled_window);
 
   self->tabs_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_valign (self->tabs_box, GTK_ALIGN_END);
+  gtk_widget_set_valign (self->tabs_box, GTK_ALIGN_FILL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (self->scrolled_window), self->tabs_box);
 
   adjustment = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (self->scrolled_window));
@@ -899,10 +903,6 @@ ephy_tab_strip_init (EphyTabStrip *self)
   gtk_box_append (GTK_BOX (self->box), plus_button);
   self->new_tab_button = plus_button;
 
-  spacer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_hexpand (spacer, TRUE);
-  gtk_box_append (GTK_BOX (self->box), spacer);
-
   self->tab_search_button = gtk_menu_button_new ();
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->tab_search_button), "system-search-symbolic");
   gtk_widget_add_css_class (self->tab_search_button, "flat");
@@ -910,6 +910,15 @@ ephy_tab_strip_init (EphyTabStrip *self)
   gtk_widget_set_valign (self->tab_search_button, GTK_ALIGN_CENTER);
   gtk_widget_set_tooltip_text (self->tab_search_button, _("Search tabs"));
   gtk_box_append (GTK_BOX (self->box), self->tab_search_button);
+
+  spacer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_hexpand (spacer, TRUE);
+  gtk_box_append (GTK_BOX (self->box), spacer);
+
+  self->window_controls = gtk_window_controls_new (GTK_PACK_END);
+  gtk_widget_set_valign (self->window_controls, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (self->box), self->window_controls);
+  g_signal_connect_object (self, "notify::root", G_CALLBACK (root_changed_cb), self, G_CONNECT_SWAPPED);
 
   self->search_popover = gtk_popover_new ();
   gtk_popover_set_has_arrow (GTK_POPOVER (self->search_popover), FALSE);
@@ -946,7 +955,34 @@ ephy_tab_strip_init (EphyTabStrip *self)
   g_signal_connect_object (self->search_popover, "show", G_CALLBACK (search_popover_show_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->search_entry, "changed", G_CALLBACK (search_entry_changed_cb), self, G_CONNECT_SWAPPED);
 
-  adw_bin_set_child (ADW_BIN (self), self->box);
+  adw_bin_set_child (ADW_BIN (self), self->window_handle);
+}
+
+static void
+update_window_controls_visibility (EphyTabStrip *self)
+{
+  GtkRoot *root;
+  gboolean visible = TRUE;
+
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+
+  if (root && GTK_IS_WINDOW (root))
+    visible = !gtk_window_is_fullscreen (GTK_WINDOW (root));
+
+  gtk_widget_set_visible (self->window_controls, visible);
+}
+
+static void
+root_changed_cb (EphyTabStrip *self)
+{
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
+
+  if (root)
+    g_signal_connect_object (root, "notify::fullscreened",
+                             G_CALLBACK (update_window_controls_visibility), self,
+                             G_CONNECT_SWAPPED);
+
+  update_window_controls_visibility (self);
 }
 
 EphyTabStrip *

@@ -198,7 +198,11 @@ main (int   argc,
   g_setenv ("PULSE_PROP_application.icon_name", APPLICATION_ID, TRUE);
 
   /* Initialize the i18n stuff */
+#if DEVELOPER_MODE
+  bindtextdomain (GETTEXT_PACKAGE, BUILD_ROOT "/po");
+#else
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+#endif
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
