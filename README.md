@@ -1,200 +1,70 @@
-# GNOME Web
+# Astrium
 
-GNOME Web (codename: Epiphany) is a GNOME web browser based on
-[the WebKit rendering engine](https://webkit.org/). The codename means "a
-usually sudden manifestation or perception of the essential nature or meaning of
-something" ([Merriam-Webster](https://www.merriam-webster.com/dictionary/epiphany)).
+Astrium is a web browser for Linux. It renders pages with WebKitGTK 6.0 and
+draws its interface with GTK 4 and libadwaita.
 
-Epiphany is opinionated.
+Astrium is a fork of [GNOME Web](https://apps.gnome.org/Epiphany/), also known
+as Epiphany.
 
-## Download and Install
+## Status
 
-Epiphany is designed for Linux systems. The recommended way to install Epiphany
-is via [Flatpak](https://www.flatpak.org/). You may:
+Early. The fork was created in November 2026 and, at the time of writing,
+differs from upstream only in its identity: it builds as
+`io.github.ArmanIOL.Astrium`, installs an executable called `astrium`, and uses
+its own icon. Tabs, bookmarks, history, sessions, incognito mode, tracker
+blocking and WebExtensions all come from upstream and work as they do in GNOME
+Web.
 
- * [Download the latest stable version from Flathub](https://flathub.org/apps/details/org.gnome.Epiphany)
-   (recommended).
- * [Download Epiphany Technology Preview](https://nightly.gnome.org/repo/appstream/org.gnome.Epiphany.Devel.flatpakref)
-   if you are adventurous and want to help test tomorrow's Epiphany today. It
-   is **not stable**.
+There are no releases yet, so building from source is the only way to run it.
 
- * Download Epiphany Canary if you are even more adventurous and want to help
-   test the most recent development versions of WebKitGTK and Epiphany. This
-   flavor of Epiphany is more likely to be **very unstable** because the code
-   being built comes directly from WebKit's git main branch and Epiphany's git
-   master branch. Epiphany Canary can be installed by executing the following
-   flatpak command in a terminal:
+## Relationship to GNOME Web
 
-   ```shell
-   flatpak --user install https://nightly.gnome.org/repo/appstream/org.gnome.Epiphany.Canary.flatpakref
-   ```
+Astrium is an independent project. It is not produced, endorsed or supported by
+the GNOME project or the Epiphany maintainers, and reports filed here will not
+reach them.
 
-Epiphany is probably also available via your operating system's package manager,
-but such packages are often outdated and insecure. Flatpak is the best
-application distribution mechanism for Linux.
-
-## Building from Source
-
-### The Easy Way
-
-The recommended way to build Epiphany locally is using the flatpak-builder
-manifest with GNOME Builder. After installing Builder and launching it, you'll
-see the Select a Project page. Select Open, then select the toplevel Epiphany
-directory. Builder will detect the org.gnome.Epiphany.json flatpak-builder
-manifest and you will be able to build the project in Builder. All required
-dependencies will be provided by the manifest.
-
-### Building Manually
-
-Epiphany uses the [Meson build system](http://mesonbuild.com/). You can build
-Epiphany the same way you would any software that uses Meson. For example:
+The repository keeps an `upstream` remote pointing at the Epiphany repository,
+and upstream fixes are merged regularly:
 
 ```
-$ mkdir build && cd build
-$ meson ..
-$ ninja
-$ sudo ninja install
+git fetch upstream
+git merge upstream/main
 ```
 
-You will have to install several pkg-config dependencies. If you are missing a
-dependency, meson will present an error that looks like this:
+Patches that are not about Astrium itself are better sent upstream, where they
+benefit every user of the engine-independent parts of the code.
+
+## Building
+
+You need meson, ninja, a C compiler and the development packages for GTK 4,
+libadwaita, WebKitGTK 6.0, libsoup 3, json-glib, libxml2, libsecret, libarchive,
+libportal, sqlite3, gcr, gstreamer, nettle and gmp. Meson names the missing
+ones when you configure the build.
 
 ```
-meson.build:84:0: ERROR:  Native dependency 'hogweed' not found
+meson setup _build
+meson compile -C _build
+./_build/src/astrium
 ```
 
-In RPM-based distributions, you can install the missing dependencies
-automatically. For example, in Fedora:
+The Flatpak manifest is `io.github.ArmanIOL.Astrium.json`. It builds the `Devel`
+profile and is meant for development, not for distribution.
 
-```
-$ sudo dnf install 'pkgconfig(hogweed)'
-```
+## License
 
-In deb-based distributions:
+Astrium is distributed under the GNU General Public License, version 3 or
+later, the same terms as upstream. Copyright in the original code belongs to
+the GNOME contributors and the Epiphany developers; those notices are kept in
+the source files.
 
-```
-$ sudo apt install $(apt-file search --package-only hogweed)
-```
+## AI disclosure
 
-In other distributions, you must research each dependency to determine which
-package provides the required pkg-config file.
+The code in this fork, including its commit history, documentation and this
+README, was generated by an AI language model. No human security review has
+taken place. There has been no audit of the networking code, the sandboxing,
+the password storage or the update path.
 
-### Rebuilding Dependencies
-
-Newcomers should try to avoid bugs that require making changes in WebKit or
-other dependencies of Epiphany. Once you've contributed a few easier patches to
-Epiphany and are ready to start making code changes in WebKit or other
-dependencies, then your development setup becomes a bit more complicated. You
-are welcome to use whatever method you prefer for development, but the
-recommended method is to use either [Toolbox](https://containertoolbx.org/) or
-[JHBuild](https://gnome.pages.gitlab.gnome.org/jhbuild/index.html). Here is an
-example of how to build your own WebKit using JHBuild, assuming your JHBuild
-installation prefix is `$HOME/jhbuild install/`:
-
-```
-$ git clone https://github.com/WebKit/WebKit.git WebKit
-$ mkdir -p WebKit/WebKitBuild/GNOME
-$ cd WebKit/WebKitBuild/GNOME
-$ jhbuild run cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPORT=GTK -DDEVELOPER_MODE=ON -DCMAKE_INSTALL_PREFIX=$HOME/jhbuild/install/ -DCMAKE_INSTALL_LIBDIR=lib -GNinja ../..
-$ jhbuild run ninja
-$ jhbuild run cmake -P cmake_install.cmake
-```
-
-## Manifesto
-
-A web browser is more than an application: it is a way of thinking, a way of
-seeing the world. Epiphany's principles are simplicity, standards compliance,
-and software freedom.
-
-### Simplicity
-
-Feature bloat and user interface clutter is evil.
-
-Epiphany aims to present the simplest interface possible for a browser. Simple
-does not necessarily mean less-powerful. The commonly-used browsers of today are
-too big, buggy, and bloated. Epiphany is a small browser designed for the web:
-not for mail, newsgroups, file management, instant messaging, or coffeemaking.
-The UNIX philosophy is to design small tools that do one thing and do it well.
-
-### Standards Compliance
-
-The introduction of nonstandard features in browsers could make it difficult
-or impossible to use alternative products like Epiphany if developers embrace
-them. Alternative standards-complying browsers might not be able to fully access
-websites making use of these features. The success of nonstandard features can
-ultimately lead one browser to dominate the market.
-
-Standards compliance ensures the freedom of choice. Epiphany aims to achieve
-this.
-
-### Software Freedom
-
-Epiphany is not just free of cost; more importantly, the source code is made
-available to you under a license that [respects your freedom](https://www.gnu.org/philosophy/philosophy.html).
-
-Just as GNOME exists to oppose proprietary desktop software, Epiphany opposes
-the dominance of the web by proprietary software web browsers. Today's chief
-offender is Google Chrome, a browser that purports to be open source, yet
-actually includes several proprietary components. In contrast, Epiphany is fully
-free software.
-
-## Human Interface
-
-Epiphany follows the [GNOME Human Interface Guidelines](https://developer.gnome.org/hig).
-Unless there are serious reasons to make an exception, not following the
-guidelines will be considered a bug.
-
-### GNOME Integration
-
-Epiphany's main goal is to be integrated with GNOME, as well as similar
-desktops (notably elementary OS). We don't aim to make Epiphany usable outside
-these environments.
-
-### Preferences
-
-We are cautious about adding new preferences. Preferences can be added when they
-make sense, but they should always be carefully-considered.
-[Preferences come with a cost](https://ometer.com/preferences.html).
-
-### Target Audience
-
-We target nontechnical users by design. This happens to be 90% of the user
-population. Technical details should not be exposed in the interface.
-
-We target web users, not web developers. A few geek-oriented features, like the
-web inspector, are welcome so long as they are non-obtrusive.
-
-## Privacy Policy
-
-The GNOME Web developers are grateful that Mozilla allows third-party use of its
-Firefox Sync service. The following privacy policy statement is required to be
-displayed on this website in order to comply with the terms of service for
-Firefox Sync:
-
-### Firefox Sync
-
-By default, GNOME Web collects personal data, such as your bookmarks and web
-browsing history. This data is stored locally on your computer for your own
-personal use. It is never transmitted to the GNOME Web developers. It is never
-transmitted to any third party unless you choose to enable optional Sync
-integration. If Sync integration is enabled, your data is encrypted and
-transmitted to Mozilla's Firefox Sync server, where it is stored in encrypted
-form. Although GNOME Web uses the Firefox Sync service, GNOME Web is not
-Firefox and is not produced or endorsed by Mozilla.
-
-### Tracking Prevention
-
-GNOME Web enables Intelligent Tracking Prevention by default. It includes many
-other tracking prevention measures. [Refer to WebKit's tracking prevention
-documentation for full details.](https://webkit.org/tracking-prevention/)
-
-### Adblock
-
-GNOME Web regularly downloads updated adblock filter lists from the
-ublock-webkit-filters GitHub project. Users who are concerned about GNOME Web
-automatically connecting to GitHub may disable this feature in Preferences.
-
-## Contact Us
-
-The recommended way to contact us is via the
-[Epiphany discussion forum](https://discourse.gnome.org/tag/epiphany).
+Treat every build from this repository as untrusted software. Do not use it for
+online banking, corporate accounts, or any session whose credentials you would
+mind losing. Do not ship it to other people. If you want a WebKit-based browser
+you can rely on, use [GNOME Web](https://apps.gnome.org/Epiphany/) instead.
