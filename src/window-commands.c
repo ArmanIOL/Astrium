@@ -1501,17 +1501,15 @@ window_cmd_new_tab (GSimpleAction *action,
                     gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  char *url;
+  g_autofree char *url = NULL;
 
   url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
-  if (g_strcmp0 (url, "about:newtab") != 0) {
+  if (url && (url[0] == '\0' || g_strcmp0 (url, "about:newtab") == 0))
     g_clear_pointer (&url, g_free);
-  }
 
   ephy_link_open (EPHY_LINK (window),
                   url, NULL,
                   EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
-  g_free (url);
 }
 
 static void

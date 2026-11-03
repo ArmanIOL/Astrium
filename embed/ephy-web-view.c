@@ -3818,7 +3818,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
   }
 
   home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
-  if (!home || home[0] == '\0') {
+  if (!home || home[0] == '\0' || g_strcmp0 (home, "about:newtab") == 0) {
     ephy_web_view_load_new_tab_page (view);
   } else {
     ephy_web_view_freeze_history (view);
@@ -3846,7 +3846,8 @@ ephy_web_view_load_new_tab_page (EphyWebView *view)
   else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     ephy_web_view_load_url (view, "about:blank");
   else
-    ephy_web_view_load_url (view, "about:overview");
+    /* Astrium opens the Google home page in new tabs, like Chrome. */
+    ephy_web_view_load_url (view, "https://www.google.com/");
 }
 
 /**

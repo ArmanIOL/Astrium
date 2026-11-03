@@ -13,7 +13,7 @@
 			<summary>Browse with caret</summary>
 		</key>
 		<key type="s" name="homepage-url">
-			<default>''</default>
+			<default>'https://www.google.com/'</default>
 			<summary>Home page</summary>
 			<description>Address of the user’s home page.</description>
 		</key>
