@@ -706,10 +706,10 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
    * needed for our alternate HTML error pages.
    */
   if (g_str_has_prefix (uri, "ephy-resource:") ||
-      g_str_has_prefix (path, "/org/gnome/epiphany/page-icons/") ||
-      g_str_has_prefix (path, "/org/gnome/epiphany/page-templates/") ||
-      (g_str_has_prefix (uri, "ephy-reader:") && g_str_has_prefix (path, "/org/gnome/epiphany/readability/")) ||
-      (g_str_has_prefix (uri, EPHY_VIEW_SOURCE_SCHEME ":") && g_str_has_prefix (path, "/org/gnome/epiphany/highlightjs/"))) {
+      g_str_has_prefix (path, "/io/github/armaniol/astrium/page-icons/") ||
+      g_str_has_prefix (path, "/io/github/armaniol/astrium/page-templates/") ||
+      (g_str_has_prefix (uri, "ephy-reader:") && g_str_has_prefix (path, "/io/github/armaniol/astrium/readability/")) ||
+      (g_str_has_prefix (uri, EPHY_VIEW_SOURCE_SCHEME ":") && g_str_has_prefix (path, "/io/github/armaniol/astrium/highlightjs/"))) {
     stream = g_resources_open_stream (path, 0, &error);
     if (stream)
       webkit_uri_scheme_request_finish (request, stream, size, NULL);

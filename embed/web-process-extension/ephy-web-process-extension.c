@@ -410,9 +410,9 @@ content_script_window_object_cleared_cb (WebKitScriptWorld *world,
   js_browser = jsc_context_get_value (js_context, "browser");
   g_assert (!jsc_value_is_object (js_browser));
 
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  bytes = g_resources_lookup_data ("/io/github/armaniol/astrium-web-process-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/webextensions-common.js", 1);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///io/github/armaniol/astrium-web-process-extension/js/webextensions-common.js", 1);
   g_clear_object (&result);
 
   ephy_webextension_install_common_apis (page,
@@ -1034,9 +1034,9 @@ default_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   js_browser = jsc_context_get_value (js_context, "browser");
   g_assert (!jsc_value_is_object (js_browser));
 
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  bytes = g_resources_lookup_data ("/io/github/armaniol/astrium-web-process-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/webextensions-common.js", 1);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///io/github/armaniol/astrium-web-process-extension/js/webextensions-common.js", 1);
   g_clear_pointer (&bytes, g_bytes_unref);
   g_clear_object (&result);
 
@@ -1059,9 +1059,9 @@ default_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   jsc_value_object_set_property (js_extension, "_ephy_get_view_objects", js_function);
   g_clear_object (&js_function);
 
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/webextensions.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  bytes = g_resources_lookup_data ("/io/github/armaniol/astrium-web-process-extension/js/webextensions.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/webextensions.js", 1);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///io/github/armaniol/astrium-web-process-extension/js/webextensions.js", 1);
   g_clear_object (&result);
 }
 
@@ -1161,16 +1161,16 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   g_assert (jsc_value_is_undefined (result));
   g_clear_object (&result);
 
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  bytes = g_resources_lookup_data ("/io/github/armaniol/astrium-web-process-extension/js/ephy_autofill.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", 1);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///io/github/armaniol/astrium-web-process-extension/js/ephy_autofill.js", 1);
   g_clear_pointer (&bytes, g_bytes_unref);
   g_clear_object (&result);
   js_ephy_autofill = jsc_context_get_value (js_context, "EphyAutofill");
 
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  bytes = g_resources_lookup_data ("/io/github/armaniol/astrium-web-process-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy.js", 1);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///io/github/armaniol/astrium-web-process-extension/js/ephy.js", 1);
   g_clear_pointer (&bytes, g_bytes_unref);
   g_clear_object (&result);
   js_ephy = jsc_context_get_value (js_context, "Ephy");
@@ -1208,9 +1208,9 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
     g_autoptr (JSCValue) js_overview_ctor = NULL;
     g_autoptr (JSCValue) jsc_overview_model = NULL;
 
-    bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/overview.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+    bytes = g_resources_lookup_data ("/io/github/armaniol/astrium-web-process-extension/js/overview.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
     data = g_bytes_get_data (bytes, &data_size);
-    result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/overview.js", 1);
+    result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///io/github/armaniol/astrium-web-process-extension/js/overview.js", 1);
     g_clear_pointer (&bytes, g_bytes_unref);
     g_clear_object (&result);
 

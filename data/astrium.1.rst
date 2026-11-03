@@ -1,26 +1,27 @@
 ========
-epiphany
+astrium
 ========
 
-------------------------------------------
+-----------------------------------------
 A simple, clean, beautiful view of the web
-------------------------------------------
+-----------------------------------------
 
-:Date: May 2025
+:Date: November 2026
+:Copyright: Copyright 2026 ArmanIOL
 :Copyright: Copyright 2006-2025 GNOME Foundation
 :Manual section: 1
 
 SYNOPSIS
 --------
 
-|  **epiphany** [*OPTION*...] [*URL*...]
+|  **astrium** [*OPTION*...] [*URL*...]
 
 DESCRIPTION
 -----------
 
-**epiphany** is the codename of GNOME Web, the web browser designed for the
-GNOME desktop. It offers first-class GNOME integration, using WebKitGTK for web
-rendering.
+**astrium** is a web browser for Linux, built on WebKitGTK and GTK 4. It is a
+fork of GNOME Web (Epiphany) and shares its rendering engine and much of its
+code.
 
 OPTIONS
 -------
@@ -64,14 +65,13 @@ OPTIONS
 ``--version``
 
   Show version
-  
-Epiphany has a comprehensive help system.  Run the browser
-and select ``Help`` from the menu.
+
+Astrium has a help system. Run the browser and select ``Help`` from the menu.
 
 AUTHOR
 ------
 
-Epiphany has been developed by Marco Pesenti Gritti (in memoriam),
-Christian Persch, Xan Lopez, Carlos Garcia Campos, Claudio Saavedra,
-Michael Catanzaro, Jan-Michael Brummer, Alice Mikhaylenko,
-Patrick Griffis, and many others.
+Astrium is maintained by ArmanIOL. The browser is derived from Epiphany, which
+was developed by Marco Pesenti Gritti (in memoriam), Christian Persch,
+Xan Lopez, Carlos Garcia Campos, Claudio Saavedra, Michael Catanzaro,
+Jan-Michael Brummer, Alice Mikhaylenko, Patrick Griffis, and many others.

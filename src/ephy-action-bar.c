@@ -581,7 +581,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                                      object_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/action-bar.ui");
+                                               "/io/github/armaniol/astrium/gtk/action-bar.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, toolbar);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, tab_button);

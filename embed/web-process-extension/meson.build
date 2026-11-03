@@ -2,10 +2,10 @@
 # Web Process Extensions
 #
 
-web_process_extension_resource_files = files('resources/epiphany-web-process-extension.gresource.xml')
-web_process_extension_resources = gnome.compile_resources('epiphany-web-process-extension-resources',
+web_process_extension_resource_files = files('resources/astrium-web-process-extension.gresource.xml')
+web_process_extension_resources = gnome.compile_resources('astrium-web-process-extension-resources',
     web_process_extension_resource_files,
-    c_name: 'epiphany_web_process_extension',
+    c_name: 'astrium_web_process_extension',
     source_dir: 'resources'
 )
 

@@ -1,8 +1,8 @@
 [Desktop Entry]
-Exec=epiphany %U
+Exec=astrium %U
 StartupNotify=true
 Terminal=false
 Type=Application
 Icon=web-browser
-Categories=Network;GNOME;GTK;WebBrowser;
+Categories=Network;GTK;WebBrowser;
 MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;

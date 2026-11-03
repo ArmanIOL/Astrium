@@ -371,7 +371,7 @@ html.epiphany-html {
 .overview-thumbnail {
     height: 160px;
     display: block;
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/web-watermark.svg) center no-repeat, var(--base-color);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/web-watermark.svg) center no-repeat, var(--base-color);
     background-repeat: no-repeat;
     border-radius: 12px;
     border-color: 1px solid transparent;
@@ -417,12 +417,12 @@ html.epiphany-html {
     color: #888;
     width: 24px;
     height: 24px;
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-remove-item.svg) center no-repeat, rgba(0,0,0,.55);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/overview-remove-item.svg) center no-repeat, rgba(0,0,0,.55);
     border-radius: 50%;
 }
 
 .overview-close-button:hover {
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-remove-item.svg) center no-repeat, rgba(0,0,0,.8);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/overview-remove-item.svg) center no-repeat, rgba(0,0,0,.8);
 }
 
 .overview-close-button:active {
@@ -440,7 +440,7 @@ html.epiphany-html {
     color: #888;
     width: 24px;
     height: 24px;
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.55);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.55);
     border-radius: 50%;
 }
 
@@ -450,7 +450,7 @@ html.epiphany-html {
 }
 
 .overview-pin-button:hover {
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.8);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.8);
 }
 
 .overview-pin-button:active {
@@ -459,11 +459,11 @@ html.epiphany-html {
 }
 
 .overview-item-pinned .overview-pin-button {
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.75);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.75);
 }
 
 .overview-item-pinned .overview-pin-button:hover {
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.85);
+    background: url(ephy-resource:///io/github/armaniol/astrium/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.85);
 }
 
 .overview-removed .overview-pin-button {

@@ -37,7 +37,7 @@ runtime_handler_get_browser_info (EphyWebExtensionSender *sender,
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "name");
-  json_builder_add_string_value (builder, "Epiphany");
+  json_builder_add_string_value (builder, "Astrium");
   json_builder_set_member_name (builder, "version");
   json_builder_add_string_value (builder, EPHY_VERSION);
   json_builder_set_member_name (builder, "vendor");

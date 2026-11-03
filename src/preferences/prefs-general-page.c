@@ -436,7 +436,7 @@ create_add_language_dialog (PrefsGeneralPage *general_page)
   g_autoptr (GtkBuilder) builder = NULL;
   g_auto (GStrv) locales = NULL;
 
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
+  builder = gtk_builder_new_from_resource ("/io/github/armaniol/astrium/gtk/prefs-lang-dialog.ui");
   ad = ADW_DIALOG (gtk_builder_get_object (builder, "add_language_dialog"));
 
   add_button = GTK_WIDGET (gtk_builder_get_object (builder, "add_button"));
@@ -939,7 +939,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   object_class->dispose = prefs_general_page_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-general-page.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-general-page.ui");
 
   signals[WEBAPP_ADDITIONAL_URLS_ROW_ACTIVATED] =
     g_signal_new ("webapp-additional-row-activated",

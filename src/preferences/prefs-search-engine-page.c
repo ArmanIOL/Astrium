@@ -360,7 +360,7 @@ prefs_search_engine_page_class_init (PrefsSearchEnginePageClass *klass)
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-search-engine-page.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-search-engine-page.ui");
 
   gtk_widget_class_bind_template_child (widget_class, PrefsSearchEnginePage, name_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsSearchEnginePage, address_row);

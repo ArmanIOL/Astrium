@@ -438,7 +438,7 @@ clear_data_view_class_init (ClearDataViewClass *klass)
   g_type_ensure (WEBKIT_TYPE_WEBSITE_DATA);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/clear-data-view.ui");
+                                               "/io/github/armaniol/astrium/gtk/clear-data-view.ui");
 
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treeview);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, active_column);

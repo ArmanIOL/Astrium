@@ -45,7 +45,7 @@ const SecretSchema *
 ephy_sync_utils_get_secret_schema (void)
 {
   static const SecretSchema schema = {
-    "org.epiphany.SyncSecrets", SECRET_SCHEMA_NONE,
+    "io.github.armaniol.astrium.SyncSecrets", SECRET_SCHEMA_NONE,
     {
       { EPHY_SYNC_SECRET_ACCOUNT_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { "NULL", 0 },
@@ -269,8 +269,8 @@ ephy_sync_utils_make_client_record (const char *device_bso_id,
   json_object_set_string_member (object, "version", VERSION);
   json_object_set_array_member (object, "protocols", array);
   json_object_set_string_member (object, "os", "Linux");
-  json_object_set_string_member (object, "appPackage", "org.gnome.epiphany");
-  json_object_set_string_member (object, "application", "Epiphany");
+  json_object_set_string_member (object, "appPackage", "io.github.armaniol.astrium");
+  json_object_set_string_member (object, "application", "Astrium");
 
   node = json_node_new (JSON_NODE_OBJECT);
   json_node_take_object (node, object);

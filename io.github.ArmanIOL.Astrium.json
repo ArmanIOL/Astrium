@@ -1,13 +1,13 @@
 {
-    "app-id" : "org.gnome.Epiphany.Devel",
+    "app-id" : "io.github.ArmanIOL.Astrium.Devel",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
-    "command" : "epiphany",
+    "command" : "astrium",
     "tags" : [
         "nightly"
     ],
-    "desktop-file-name-suffix" : " (Epiphany Technology Preview)",
+    "desktop-file-name-suffix" : " (Astrium Technology Preview)",
     "finish-args" : [
         "--device=dri",
         "--device=input",
@@ -17,7 +17,7 @@
         "--socket=fallback-x11",
         "--socket=pulseaudio",
         "--socket=wayland",
-        "--own-name=org.gnome.Epiphany.WebAppProvider",
+        "--own-name=io.github.ArmanIOL.Astrium.WebAppProvider",
         "--require-version=1.16.0"
     ],
     "modules" : [
@@ -37,7 +37,7 @@
             ]
         },
         {
-            "name" : "epiphany",
+            "name" : "astrium",
             "buildsystem" : "meson",
             "builddir" : true,
             "config-opts" : [
@@ -53,13 +53,13 @@
                     "--socket=fallback-x11",
                     "--socket=pulseaudio",
                     "--socket=wayland",
-                    "--own-name=org.gnome.Epiphany.WebAppProvider"
+                    "--own-name=io.github.ArmanIOL.Astrium.WebAppProvider"
                 ]
             },
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "url" : "https://github.com/ArmanIOL/Astrium.git",
                     "branch" : "main",
                     "disable-shallow-clone" : true
                 }

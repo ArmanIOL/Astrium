@@ -491,7 +491,7 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-properties.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/bookmark-properties.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, navigation_view);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, name_row);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, address_row);

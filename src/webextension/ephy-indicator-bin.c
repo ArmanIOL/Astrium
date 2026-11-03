@@ -64,7 +64,7 @@ ensure_shader (EphyIndicatorBin *self)
     return;
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  self->shader = gsk_gl_shader_new_from_resource ("/org/gnome/epiphany/mask.glsl");
+  self->shader = gsk_gl_shader_new_from_resource ("/io/github/armaniol/astrium/mask.glsl");
 
   native = gtk_widget_get_native (GTK_WIDGET (self));
   renderer = gtk_native_get_renderer (native);

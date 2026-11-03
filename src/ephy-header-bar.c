@@ -223,7 +223,7 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
   gobject_class->constructed = ephy_header_bar_constructed;
   gobject_class->dispose = ephy_header_bar_dispose;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/header-bar.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/header-bar.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, header_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_start);

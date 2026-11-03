@@ -124,7 +124,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-privacy-page.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-privacy-page.ui");
 
   signals[CLEAR_DATA_ROW_ACTIVATED] =
     g_signal_new ("clear-data-row-activated",

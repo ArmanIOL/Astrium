@@ -123,7 +123,7 @@ ephy_encoding_row_class_init (EphyEncodingRowClass *klass)
   g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   /* load from UI file */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/encoding-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/encoding-row.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingRow, encoding_label);
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingRow, selected_image);

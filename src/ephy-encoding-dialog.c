@@ -485,7 +485,7 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
   g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   /* load from UI file */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/encoding-dialog.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/encoding-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, type_stack);
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, default_switch);

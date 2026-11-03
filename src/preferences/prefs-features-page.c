@@ -373,7 +373,7 @@ prefs_features_page_class_init (PrefsFeaturesPageClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-features-page.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-features-page.ui");
   gtk_widget_class_bind_template_child (widget_class, PrefsFeaturesPage, reset_all_row);
 
   gtk_widget_class_bind_template_callback (widget_class, reset_all_row_activated_cb);

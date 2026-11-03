@@ -347,7 +347,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
                   G_TYPE_NONE);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/data-view.ui");
+                                               "/io/github/armaniol/astrium/gtk/data-view.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, toast_overlay);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, box);

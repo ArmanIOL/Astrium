@@ -169,7 +169,7 @@ ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogCla
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/webapp-additional-urls-dialog.ui");
+                                               "/io/github/armaniol/astrium/gtk/webapp-additional-urls-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyWebappAdditionalURLsDialog, url_group);
   gtk_widget_class_bind_template_child (widget_class, EphyWebappAdditionalURLsDialog, add_row);

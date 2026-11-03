@@ -273,7 +273,7 @@ launch_uri (const char *uri,
 
   /* TODO: Handle the timestamp */
   quoted_uri = g_shell_quote (uri);
-  str = g_strdup_printf ("epiphany -- %s", quoted_uri);
+  str = g_strdup_printf ("astrium -- %s", quoted_uri);
   g_spawn_command_line_async (str, &error);
 
   if (error)

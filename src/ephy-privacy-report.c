@@ -112,7 +112,7 @@ ephy_privacy_report_class_init (EphyPrivacyReportClass *klass)
   object_class->dispose = ephy_privacy_report_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/privacy-report.ui");
+                                               "/io/github/armaniol/astrium/gtk/privacy-report.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, website_listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, tracker_listbox);

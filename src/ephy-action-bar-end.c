@@ -243,7 +243,7 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
   object_class->dispose = ephy_action_bar_end_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/action-bar-end.ui");
+                                               "/io/github/armaniol/astrium/gtk/action-bar-end.ui");
 
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,

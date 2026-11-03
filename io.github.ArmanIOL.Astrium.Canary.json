@@ -1,5 +1,5 @@
 {
-    "app-id" : "org.gnome.Epiphany.Canary",
+    "app-id" : "io.github.ArmanIOL.Astrium.Canary",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
@@ -20,7 +20,7 @@
         "--socket=fallback-x11",
         "--socket=pulseaudio",
         "--socket=wayland",
-        "--own-name=org.gnome.Epiphany.WebAppProvider",
+        "--own-name=io.github.ArmanIOL.Astrium.WebAppProvider",
         "--require-version=1.16.0"
     ],
     "modules" : [
@@ -66,7 +66,7 @@
             ]
         },
         {
-            "name" : "epiphany",
+            "name" : "astrium",
             "buildsystem" : "meson",
             "config-opts" : [
                 "-Dprofile=Canary"
@@ -74,13 +74,13 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "url" : "https://github.com/ArmanIOL/Astrium.git",
                     "branch" : "main",
                     "disable-shallow-clone" : true
                 }
             ],
             "post-install" : [
-                "sed -i 's;Exec=epiphany;Exec=ephy-wrapper;g' /app/share/applications/org.gnome.Epiphany.Canary.desktop"
+                "sed -i 's;Exec=astrium;Exec=ephy-wrapper;g' /app/share/applications/io.github.ArmanIOL.Astrium.Canary.desktop"
             ]
         },
         {
@@ -96,7 +96,7 @@
                     "commands" : [
                         "export WEBKIT_INJECTED_BUNDLE_PATH=/app/lib/webkitgtk-6.0/injected-bundle",
                         "export WEBKIT_EXEC_PATH=/app/libexec",
-                        "exec epiphany \"$@\""
+                        "exec astrium \"$@\""
                     ]
                 }
             ]

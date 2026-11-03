@@ -388,7 +388,7 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
   object_class->dispose = prefs_appearance_page_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-appearance-page.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-appearance-page.ui");
 
   /* Fonts */
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, use_gnome_fonts_row);

@@ -285,7 +285,7 @@ prefs_extensions_page_class_init (PrefsExtensionsPageClass *klass)
                   EPHY_TYPE_WEB_EXTENSION);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-extensions-page.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-extensions-page.ui");
 
   gtk_widget_class_bind_template_child (widget_class, PrefsExtensionsPage, stack);
   gtk_widget_class_bind_template_child (widget_class, PrefsExtensionsPage, listbox);

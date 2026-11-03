@@ -91,7 +91,7 @@ static const SecretSchema *
 get_schema (void)
 {
   static const SecretSchema schema = {
-    "org.epiphany.autofill", SECRET_SCHEMA_NONE,
+    "io.github.armaniol.astrium.autofill", SECRET_SCHEMA_NONE,
     {
       { FIELD_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { "NULL", 0 }

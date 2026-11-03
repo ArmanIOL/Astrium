@@ -1324,7 +1324,7 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   if (custom_user_agent)
     webkit_settings_set_user_agent (settings, custom_user_agent);
   else
-    webkit_settings_set_user_agent_with_application_details (settings, "Epiphany", EPHY_VERSION);
+    webkit_settings_set_user_agent_with_application_details (settings, "Astrium", EPHY_VERSION);
 
   /* If there is a background view the web context is shared with the related-view property. */
   background_view = ephy_web_extension_manager_get_background_web_view (manager, web_extension);

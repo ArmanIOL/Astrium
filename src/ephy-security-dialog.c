@@ -292,7 +292,7 @@ ephy_security_dialog_class_init (EphySecurityDialogClass *klass)
   object_class->set_property = ephy_security_dialog_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/security-dialog.ui");
+                                               "/io/github/armaniol/astrium/gtk/security-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphySecurityDialog, status_page);
   gtk_widget_class_bind_template_child (widget_class, EphySecurityDialog, listbox);

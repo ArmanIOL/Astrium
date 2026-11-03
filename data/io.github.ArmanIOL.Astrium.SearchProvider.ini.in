@@ -1,5 +1,5 @@
 [Shell Search Provider]
 DesktopId=@appid@.desktop
 BusName=@appid@.SearchProvider
-ObjectPath=/org/gnome/Epiphany@profile@/SearchProvider
+ObjectPath=/io/github/ArmanIOL/Astrium@profile@/SearchProvider
 Version=2

@@ -70,8 +70,8 @@
  * it.
  */
 
-#define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
-#define EPHY_PAGE_TEMPLATE_ERROR_CSS     "/org/gnome/epiphany/page-templates/error.css"
+#define EPHY_PAGE_TEMPLATE_ERROR         "/io/github/armaniol/astrium/page-templates/error.html"
+#define EPHY_PAGE_TEMPLATE_ERROR_CSS     "/io/github/armaniol/astrium/page-templates/error.css"
 
 static guint64 web_view_uid = 1;
 
@@ -656,7 +656,7 @@ run_readability_js_if_needed (gpointer data)
   /* Internal pages should never receive reader mode. */
   if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
     g_autoptr (GError) error = NULL;
-    g_autoptr (GBytes) bytes = g_resources_lookup_data ("/org/gnome/epiphany/readability/Readability-readerable.js",
+    g_autoptr (GBytes) bytes = g_resources_lookup_data ("/io/github/armaniol/astrium/readability/Readability-readerable.js",
                                                         G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
 
     if (bytes) {
@@ -667,7 +667,7 @@ run_readability_js_if_needed (gpointer data)
       webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (web_view),
                                            script, length,
                                            EPHY_READER_SCRIPT_WORLD_NAME,
-                                           "resource:///org/gnome/epiphany/readability/Readability-readerable.js",
+                                           "resource:///io/github/armaniol/astrium/readability/Readability-readerable.js",
                                            web_view->cancellable,
                                            readability_js_finish_cb,
                                            web_view);
@@ -2575,8 +2575,8 @@ authenticate_succeeded_cb (WebKitAuthenticationRequest *request,
                               webkit_credential_get_username (credential),
                               webkit_credential_get_username (credential),
                               webkit_credential_get_password (credential),
-                              "org.gnome.Epiphany.HTTPAuthCredentials.Username",
-                              "org.gnome.Epiphany.HTTPAuthCredentials.Password",
+                              "io.github.ArmanIOL.Astrium.HTTPAuthCredentials.Username",
+                              "io.github.ArmanIOL.Astrium.HTTPAuthCredentials.Password",
                               TRUE);
 }
 
@@ -2680,8 +2680,8 @@ authenticate_cb (WebKitWebView               *web_view,
                                origin,
                                origin,
                                NULL,
-                               "org.gnome.Epiphany.HTTPAuthCredentials.Username",
-                               "org.gnome.Epiphany.HTTPAuthCredentials.Password",
+                               "io.github.ArmanIOL.Astrium.HTTPAuthCredentials.Username",
+                               "io.github.ArmanIOL.Astrium.HTTPAuthCredentials.Password",
                                FALSE,
                                (EphyPasswordManagerQueryCallback)auth_password_query_finished_cb,
                                data);

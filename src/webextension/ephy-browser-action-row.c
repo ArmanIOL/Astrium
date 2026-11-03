@@ -146,7 +146,7 @@ ephy_browser_action_row_class_init (EphyBrowserActionRowClass *klass)
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/browser-action-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/browser-action-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, browser_action_image);
   gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, title_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, badge);

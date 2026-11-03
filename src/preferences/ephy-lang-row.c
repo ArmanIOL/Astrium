@@ -154,7 +154,7 @@ ephy_lang_row_class_init (EphyLangRowClass *klass)
   object_class->dispose = ephy_lang_row_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/lang-row.ui");
+                                               "/io/github/armaniol/astrium/gtk/lang-row.ui");
 
   signals[DELETE_BUTTON_CLICKED] =
     g_signal_new ("delete-button-clicked",

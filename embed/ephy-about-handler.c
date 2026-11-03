@@ -49,7 +49,7 @@ G_DEFINE_FINAL_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
 
 #define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 9
 
-#define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///org/gnome/epiphany/page-templates/about.css"
+#define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///io/github/armaniol/astrium/page-templates/about.css"
 
 static void
 ephy_about_handler_finalize (GObject *object)
@@ -200,12 +200,12 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<tr><td class=\"prop-label\">%s</td><td class=\"prop-value\">%d.%d.%d</td></tr>"
                           "</table>"
                           "</div></div></body></html>",
-                          _("About Web"),
+                          _("About Astrium"),
                           path ? path : "",
 #if !TECH_PREVIEW
-                          _("Web"),
+                          _("Astrium"),
 #else
-                          _("Epiphany Technology Preview"),
+                          _("Astrium Technology Preview"),
 #endif
                           version,
                           _("A simple, clean, beautiful view of the web"),
@@ -235,7 +235,7 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler       *handler,
                           "<!-- Terre des Hommes, III: L'Avion, p. 60 -->"
                           "Antoine de Saint-Exupéry"
                           "</div></body></html>",
-                          _("Web"));
+                          _("Astrium"));
 
   ephy_about_handler_finish_request (request, data, -1);
 
@@ -600,7 +600,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler       *handler,
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
                           "</head>\n"
                           "<body class=\"incognito-body\">\n"
-                          "  <img class=\"incognito-body-image\" src=\"ephy-resource:///org/gnome/epiphany/page-icons/private-mode.svg\">\n" \
+                          "  <img class=\"incognito-body-image\" src=\"ephy-resource:///io/github/armaniol/astrium/page-icons/private-mode.svg\">\n" \
                           "  <br/>\n"
                           "  <h1>%s</h1>\n"
                           "  <p>%s</p>\n"
@@ -661,7 +661,7 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
     handled = ephy_about_handler_handle_html_overview (handler, request);
   else if (g_strcmp0 (path, "incognito") == 0)
     handled = ephy_about_handler_handle_incognito (handler, request);
-  else if (!path || path[0] == '\0' || g_strcmp0 (path, "Web") == 0 || g_strcmp0 (path, "web") == 0)
+  else if (!path || path[0] == '\0' || g_strcmp0 (path, "Astrium") == 0 || g_strcmp0 (path, "astrium") == 0 || g_strcmp0 (path, "Web") == 0 || g_strcmp0 (path, "web") == 0)
     handled = ephy_about_handler_handle_about (handler, request);
 
   if (!handled)

@@ -101,7 +101,7 @@ option_version_cb (const gchar  *option_name,
                    gpointer      data,
                    GError      **error)
 {
-  g_print ("%s %s\n", _("Web"), VERSION);
+  g_print ("%s %s\n", _("Astrium"), VERSION);
 
   exit (EXIT_SUCCESS);
   return FALSE;
@@ -264,8 +264,8 @@ main (int   argc,
   ephy_debug_init ();
 
   option_context = g_option_context_new ("");
-  option_group = g_option_group_new ("epiphany",
-                                     N_("Web"),
+  option_group = g_option_group_new ("astrium",
+                                     N_("Astrium"),
                                      N_("Web options"),
                                      NULL, NULL);
 
@@ -429,8 +429,8 @@ main (int   argc,
   }
 
   if (mode == EPHY_EMBED_SHELL_MODE_BROWSER || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-    g_set_prgname ("epiphany");
-    g_set_application_name (_("Web"));
+    g_set_prgname ("astrium");
+    g_set_application_name (_("Astrium"));
 
     gtk_window_set_default_icon_name (APPLICATION_ID);
   }

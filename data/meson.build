@@ -8,7 +8,7 @@ install_data(
 
 icondir = join_paths('icons', 'hicolor', 'symbolic', 'apps')
 install_data(
-  join_paths(icondir, 'org.gnome.Epiphany-symbolic.svg'),
+  join_paths(icondir, 'io.github.ArmanIOL.Astrium-symbolic.svg'),
   install_dir: join_paths(datadir, icondir),
   rename: '@0@-symbolic.svg'.format(application_id)
 )
@@ -17,8 +17,8 @@ desktop_conf = configuration_data()
 desktop_conf.set('icon', application_id)
 desktop = i18n.merge_file(
   input: configure_file(
-    input: files('org.gnome.Epiphany.desktop.in.in'),
-    output: 'org.gnome.Epiphany.desktop.in',
+    input: files('io.github.ArmanIOL.Astrium.desktop.in.in'),
+    output: 'io.github.ArmanIOL.Astrium.desktop.in',
     configuration: desktop_conf
   ),
   output: '@0@.desktop'.format(application_id),
@@ -32,8 +32,8 @@ metainfo_conf = configuration_data()
 metainfo_conf.set('appid', application_id)
 metainfo = i18n.merge_file(
   input: configure_file(
-    input: files('org.gnome.Epiphany.metainfo.xml.in.in'),
-    output: 'org.gnome.Epiphany.metainfo.xml.in',
+    input: files('io.github.ArmanIOL.Astrium.metainfo.xml.in.in'),
+    output: 'io.github.ArmanIOL.Astrium.metainfo.xml.in',
     configuration: metainfo_conf
   ),
   output: '@0@.metainfo.xml'.format(application_id),
@@ -48,20 +48,20 @@ metainfo = i18n.merge_file(
 # directory to ensure it is in the same place as the enums file. Then
 # we can run glib-compile-schemas on it. We have to compile schemas in
 # the build directory to ensure that our tests don't fail if run on a
-# system where epiphany is not already installed. epiphany will also
+# system where astrium is not already installed. astrium will also
 # look for schemas here if built in developer mode.
 #
 # https://github.com/mesonbuild/meson/issues/1687
 generate_enums = custom_target('gsettings-enums',
   input: '../lib/ephy-prefs.h',
-  output: 'org.gnome.Epiphany.enums.xml',
+  output: 'io.github.ArmanIOL.Astrium.enums.xml',
   install: true,
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
   capture: true,
   command: [find_program('glib-mkenums'),
     '--comments', '<!-- @comment@ -->',
     '--fhead', '<schemalist>',
-    '--vhead', '  <@type@ id="org.gnome.Epiphany.@EnumName@">',
+    '--vhead', '  <@type@ id="io.github.ArmanIOL.Astrium.@EnumName@">',
     '--vprod', '    <value nick="@valuenick@" value="@valuenum@"/>',
     '--vtail', '  </@type@>',
     '--ftail', '</schemalist>',
@@ -69,7 +69,7 @@ generate_enums = custom_target('gsettings-enums',
   ]
 )
 copy_gschema = custom_target('copy-gschema-to-builddir',
-  input: 'org.gnome.epiphany.gschema.xml',
+  input: 'io.github.armaniol.astrium.gschema.xml',
   output: 'renamed-hack.gschema.xml',
   command: ['cp', '@INPUT@', '@OUTPUT@']
 )
@@ -81,7 +81,7 @@ compile_schemas = custom_target('glib-compile-schemas',
   ],
   depends: [generate_enums, copy_gschema]
 )
-install_data('org.gnome.epiphany.gschema.xml',
+install_data('io.github.armaniol.astrium.gschema.xml',
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )
 
@@ -89,15 +89,15 @@ service_conf = configuration_data()
 service_conf.set('appid', application_id)
 service_conf.set('libexecdir', libexecdir)
 configure_file(
-  input: 'org.gnome.Epiphany.SearchProvider.service.in',
+  input: 'io.github.ArmanIOL.Astrium.SearchProvider.service.in',
   output: '@0@.SearchProvider.service'.format(application_id),
   configuration: service_conf,
   install_dir: servicedir
 )
 
 configure_file(
-  input: 'org.gnome.Epiphany.WebAppProvider.service.in',
-  output: 'org.gnome.Epiphany.WebAppProvider.service',
+  input: 'io.github.ArmanIOL.Astrium.WebAppProvider.service.in',
+  output: 'io.github.ArmanIOL.Astrium.WebAppProvider.service',
   configuration: service_conf,
   install_dir: servicedir
 )
@@ -107,7 +107,7 @@ search_provider_conf.set('appid', application_id)
 search_provider_conf.set('profile', profile != '' ? '/' + profile : '')
 configure_file(
   configuration: search_provider_conf,
-  input: files('org.gnome.Epiphany.SearchProvider.ini.in'),
+  input: files('io.github.ArmanIOL.Astrium.SearchProvider.ini.in'),
   install_dir: join_paths(datadir, 'gnome-shell', 'search-providers'),
   output: '@0@.SearchProvider.ini'.format(application_id)
 )
@@ -124,8 +124,8 @@ configure_file(
 rst2man = find_program('rst2man', 'rst2man.py', required: get_option('man-pages'))
 if rst2man.found()
   custom_target('man',
-    input: 'epiphany.1.rst',
-    output: 'epiphany.1',
+    input: 'astrium.1.rst',
+    output: 'astrium.1',
     command: [
       rst2man,
       '--syntax-highlight=none',

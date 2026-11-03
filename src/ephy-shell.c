@@ -648,7 +648,7 @@ ephy_shell_startup (GApplication *application)
 
     shell->style_provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
     gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (shell->style_provider),
-                                         "/org/gnome/Epiphany/style-elementary.css");
+                                         "/io/github/armaniol/astrium/style-elementary.css");
 
     gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                                 shell->style_provider,
@@ -755,7 +755,7 @@ automation_started_cb (WebKitWebContext        *web_context,
                        EphyShell               *shell)
 {
   WebKitApplicationInfo *info = webkit_application_info_new ();
-  webkit_application_info_set_name (info, "Epiphany");
+  webkit_application_info_set_name (info, "Astrium");
   webkit_application_info_set_version (info, EPHY_MAJOR_VERSION, EPHY_MINOR_VERSION, EPHY_MICRO_VERSION);
   webkit_automation_session_set_application_info (session, info);
   webkit_application_info_unref (info);
@@ -1519,7 +1519,7 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
   ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
                                          "application-id", id,
                                          "mode", mode,
-                                         "resource-base-path", "/org/gnome/Epiphany",
+                                         "resource-base-path", "/io/github/armaniol/astrium",
                                          NULL));
   /* FIXME weak ref */
   g_assert (ephy_shell);

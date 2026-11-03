@@ -152,7 +152,7 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   object_class->get_property = ephy_title_box_get_property;
   object_class->set_property = ephy_title_box_set_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/title-box.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/title-box.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyTitleBox, title);
   gtk_widget_class_bind_template_child (widget_class, EphyTitleBox, security_button);

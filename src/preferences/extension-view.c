@@ -225,7 +225,7 @@ ephy_extension_view_class_init (EphyExtensionViewClass *klass)
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/extension-view.ui");
+                                               "/io/github/armaniol/astrium/gtk/extension-view.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, window_title);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, author_row);

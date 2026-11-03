@@ -1,53 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2013, 2015, 2019 Epiphany contributors -->
 <component type="desktop-application">
   <id>@appid@</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <name>Web</name>
+  <name>Astrium</name>
   <summary>Browse the web</summary>
   <description>
     <p>
-      The web browser for GNOME, featuring tight integration with the desktop
-      and a simple and intuitive user interface that allows you to focus on your
-      web pages. If you’re looking for a simple, clean, beautiful view of the
-      web, this is the browser for you.
+      Astrium is a web browser for Linux. It renders pages with WebKitGTK and
+      uses the GTK 4 toolkit, so it follows the system look and feel and stays
+      out of the way while you read.
     </p>
     <p>
-      Web is often referred to by its code name, Epiphany.
+      The browser supports tabs, bookmarks, history, sessions, private
+      browsing, tracker blocking and WebExtensions. It is a fork of GNOME Web
+      (Epiphany) and shares that project's engine-independent code.
     </p>
   </description>
-  <screenshots>
-    <screenshot type="default">
-      <caption>A browser window</caption>
-      <image>https://gitlab.gnome.org/GNOME/epiphany/raw/HEAD/data/screenshot.png</image>
-    </screenshot>
-  </screenshots>
-  <update_contact>mcatanzaro_at_gnome.org</update_contact>
   <kudos>
     <kudo>AppMenu</kudo>
     <kudo>HiDpiIcon</kudo>
     <kudo>ModernToolkit</kudo>
     <kudo>SearchProvider</kudo>
-    <kudo>UserDocs</kudo>
   </kudos>
-  <project_group>GNOME</project_group>
-  <project_license>GPL-3.0+</project_license>
-  <!-- developer_name tag deprecated with Appstream 1.0 -->
-  <developer_name>The GNOME Project</developer_name>
-  <developer id="org.gnome">
-    <name>The GNOME Project</name>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="io.github.armaniol">
+    <name>ArmanIOL</name>
   </developer>
-  <url type="homepage">https://apps.gnome.org/Epiphany</url>
-  <url type="bugtracker">https://gitlab.gnome.org/GNOME/epiphany/-/work_items</url>
-  <url type="donation">https://www.gnome.org/donate/</url>
-  <url type="help">https://help.gnome.org/users/epiphany/stable/</url>
-  <url type="translate">https://l10n.gnome.org/module/epiphany</url>
-  <url type="vcs-browser">https://gitlab.gnome.org/GNOME/epiphany</url>
-  <url type="contribute">https://welcome.gnome.org/app/Epiphany</url>
-  <url type="contact">https://matrix.to/#/#epiphany:gnome.org</url>
-  <translation type="gettext">epiphany</translation>
+  <url type="homepage">https://github.com/ArmanIOL/Astrium</url>
+  <url type="bugtracker">https://github.com/ArmanIOL/Astrium/issues</url>
+  <url type="vcs-browser">https://github.com/ArmanIOL/Astrium</url>
+  <url type="contribute">https://github.com/ArmanIOL/Astrium</url>
+  <translation type="gettext">astrium</translation>
   <provides>
-    <binary>epiphany</binary>
+    <binary>astrium</binary>
   </provides>
   <launchable type="desktop-id">@appid@.desktop</launchable>
   <content_rating type="oars-1.1" />

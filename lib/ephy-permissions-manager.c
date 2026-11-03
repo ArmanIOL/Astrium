@@ -128,12 +128,12 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   if (pos)
     *pos = '\0';
 
-  origin_path = g_strdup_printf ("/org/gnome/epiphany/permissions/%s/%s/%u/",
+  origin_path = g_strdup_printf ("/io/github/armaniol/astrium/permissions/%s/%s/%u/",
                                  trimmed_protocol,
                                  webkit_security_origin_get_host (security_origin),
                                  webkit_security_origin_get_port (security_origin));
 
-  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.permissions", manager->backend, origin_path);
+  settings = g_settings_new_with_backend_and_path ("io.github.ArmanIOL.Astrium.permissions", manager->backend, origin_path);
   g_free (trimmed_protocol);
   g_free (origin_path);
   webkit_security_origin_unref (security_origin);

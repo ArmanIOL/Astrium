@@ -106,7 +106,7 @@ ephy_search_engine_list_box_class_init (EphySearchEngineListBoxClass *klass)
 
   object_class->finalize = ephy_search_engine_list_box_finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/search-engine-listbox.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/search-engine-listbox.ui");
 
   signals[ADD_SEARCH_ENGINE_ROW_ACTIVATED] =
     g_signal_new ("add-search-engine-row-activated",

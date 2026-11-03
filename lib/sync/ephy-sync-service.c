@@ -285,7 +285,7 @@ storage_request_async_ready_cb (SoupSession             *session,
     self->storage_retry_id = g_timeout_add_seconds_once (retry_seconds,
                                                          (GSourceOnceFunc)retry_storage_request_cb,
                                                          self);
-    g_source_set_name_by_id (self->storage_retry_id, "[epiphany] sync_storage_retry");
+    g_source_set_name_by_id (self->storage_retry_id, "[astrium] sync_storage_retry");
     return;
   }
 
@@ -1871,7 +1871,7 @@ ephy_sync_service_schedule_periodical_sync (EphySyncService *self)
   self->source_id = g_timeout_add_seconds (seconds,
                                            (GSourceFunc)ephy_sync_service_sync_internal,
                                            self);
-  g_source_set_name_by_id (self->source_id, "[epiphany] sync_service_sync");
+  g_source_set_name_by_id (self->source_id, "[astrium] sync_service_sync");
 
   LOG ("Scheduled new sync with frequency %u minutes", seconds / 60);
 }

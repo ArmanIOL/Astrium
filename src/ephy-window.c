@@ -4781,7 +4781,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 
   window_class->close_request = ephy_window_close_request;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/window.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, overlay_split_view);
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, overview);

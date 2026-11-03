@@ -328,7 +328,7 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
                   G_TYPE_NONE, 1,
                   ADW_TYPE_ACTION_ROW);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/bookmark-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, favicon_image);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, drag_handle);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, remove_button);

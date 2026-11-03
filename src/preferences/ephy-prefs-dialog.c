@@ -183,7 +183,7 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-dialog.ui");
+                                               "/io/github/armaniol/astrium/gtk/prefs-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, general_page);
 

@@ -118,7 +118,7 @@ ephy_tab_view_class_init (EphyTabViewClass *klass)
 
   object_class->get_property = ephy_tab_view_get_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/tab-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/tab-view.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyTabView, tab_view);
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+  <name xml:lang="en">Astrium</name>
+  <shortdesc xml:lang="en">A simple web browser for Linux</shortdesc>
+  <description xml:lang="en">Astrium is a fork of GNOME Web (Epiphany) built on WebKitGTK and GTK 4.</description>
+  <category rdf:resource="http://api.gnome.org/doap-extensions#core" />
+  <programming-language>C</programming-language>
+  <platform>GTK 4</platform>
+  <platform>Libadwaita</platform>
+
+  <homepage rdf:resource="https://github.com/ArmanIOL/Astrium" />
+  <download-page rdf:resource="https://github.com/ArmanIOL/Astrium" />
+  <bug-database rdf:resource="https://github.com/ArmanIOL/Astrium/issues" />
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>ArmanIOL</foaf:name>
+      <foaf:mbox rdf:resource="https://github.com/ArmanIOL" />
+    </foaf:Person>
+  </maintainer>
+  <!-- Astrium is a fork of GNOME Web. The original code is maintained by
+       Jan-Michael Brummer, Michael Catanzaro and other GNOME contributors at
+       https://gitlab.gnome.org/GNOME/epiphany -->
+</Project>

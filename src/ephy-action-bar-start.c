@@ -513,7 +513,7 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
   gobject_class->constructed = ephy_action_bar_start_constructed;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/action-bar-start.ui");
+                                               "/io/github/armaniol/astrium/gtk/action-bar-start.ui");
 
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,

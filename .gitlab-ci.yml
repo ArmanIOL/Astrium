@@ -15,11 +15,11 @@ include:
     ref: 'b61a03cabbf308e81289f7aaaf0b5a80a34ffb99'
 
 variables:
-  BUNDLE: 'epiphany-git.flatpak'
-  MANIFEST_PATH: 'org.gnome.Epiphany.json'
+  BUNDLE: 'astrium-git.flatpak'
+  MANIFEST_PATH: 'io.github.ArmanIOL.Astrium.json'
   RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
-  FLATPAK_MODULE: 'epiphany'
-  APP_ID: 'org.gnome.Epiphany.Devel'
+  FLATPAK_MODULE: 'astrium'
+  APP_ID: 'io.github.ArmanIOL.Astrium.Devel'
   FDO_UPSTREAM_REPO: GNOME/epiphany
 
 stages:
@@ -145,13 +145,13 @@ canary:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
-    BUNDLE: 'epiphany-canary.flatpak'
+    BUNDLE: 'astrium-canary.flatpak'
   script:
     - flatpak install -y --user org.freedesktop.Sdk.Extension.llvm22//26.08
-    - flatpak-builder --user --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
-    - flatpak build-bundle repo --runtime-repo=${RUNTIME_REPO} ${BUNDLE} org.gnome.Epiphany.Canary
+    - flatpak-builder --user --disable-rofiles-fuse --repo=repo canary_flatpak_app io.github.ArmanIOL.Astrium.Canary.json
+    - flatpak build-bundle repo --runtime-repo=${RUNTIME_REPO} ${BUNDLE} io.github.ArmanIOL.Astrium.Canary
     - tar cf repo.tar repo/
-    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json
+    - rm -rf canary-repo canary_flatpak_app io.github.ArmanIOL.Astrium.Canary.json
   artifacts:
     name: 'Canary Flatpak artifacts'
     expose_as: 'Get Canary Flatpak bundle here'

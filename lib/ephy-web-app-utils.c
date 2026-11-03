@@ -50,7 +50,7 @@
  *  - Name: the user-visible pretty app name
  *  - Normalized name: lowercase name
  *  - ID: SHA-1 of name
- *  - Epiphany App ID: org.gnome.Epiphany or org.gnome.Epiphany.Devel or org.gnome.Epiphany.Canary
+ *  - Epiphany App ID: io.github.ArmanIOL.Astrium or io.github.ArmanIOL.Astrium.Devel or io.github.ArmanIOL.Astrium.Canary
  *  - GApplication ID: <epiphany-app-id>.WebApp_<id>
  *  - Profile directory: <user-data-dir>/<gapplication-id>
  *  - Desktop file: <user-data-dir>/xdg-desktop-portal/applications/<gapplication-id>.desktop
@@ -379,7 +379,7 @@ create_desktop_file (const char  *id,
   quoted_address = g_shell_quote (address);
 
   file = g_key_file_new ();
-  exec_string_raw = g_strdup_printf ("epiphany --application-mode --profile=%s %s",
+  exec_string_raw = g_strdup_printf ("astrium --application-mode --profile=%s %s",
                                      quoted_profile_dir,
                                      quoted_address);
   exec_string = escape_exec_string (exec_string_raw);
@@ -904,9 +904,9 @@ ephy_web_application_initialize_settings (const char                *profile_dir
   g_autofree char *path = NULL;
 
   name = g_path_get_basename (profile_directory);
-  settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, "/org/gnome/epiphany/web/");
+  settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, "/io/github/armaniol/astrium/web/");
 
-  path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "web/", NULL);
+  path = g_build_path ("/", "/io/github/armaniol/astrium/web-apps/", name, "web/", NULL);
   web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, path);
 
   for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_web_schema); i++) {
@@ -917,10 +917,10 @@ ephy_web_application_initialize_settings (const char                *profile_dir
   }
 
   g_clear_object (&settings);
-  settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
+  settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, "/io/github/armaniol/astrium/state/");
 
   g_clear_pointer (&path, g_free);
-  path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "state/", NULL);
+  path = g_build_path ("/", "/io/github/armaniol/astrium/web-apps/", name, "state/", NULL);
   g_clear_object (&web_app_settings);
   web_app_settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, path);
 
@@ -933,7 +933,7 @@ ephy_web_application_initialize_settings (const char                *profile_dir
 
   if (options) {
     g_clear_pointer (&path, g_free);
-    path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "webapp/", NULL);
+    path = g_build_path ("/", "/io/github/armaniol/astrium/web-apps/", name, "webapp/", NULL);
     g_clear_object (&web_app_settings);
     web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_APP_SCHEMA, path);
 
@@ -1115,7 +1115,7 @@ ephy_web_application_is_system (EphyWebApplication *app)
   profile_directory = ephy_web_application_get_profile_directory (app->id);
   name = g_path_get_basename (profile_directory);
 
-  path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "webapp/", NULL);
+  path = g_build_path ("/", "/io/github/armaniol/astrium/web-apps/", name, "webapp/", NULL);
   web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_APP_SCHEMA, path);
 
   return g_settings_get_boolean (web_app_settings, EPHY_PREFS_WEB_APP_SYSTEM);

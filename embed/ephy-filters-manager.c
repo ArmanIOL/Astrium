@@ -1083,11 +1083,11 @@ update_adblock_filter_files_cb (GSettings          *settings,
                         manager);
 
   if (hush_enabled) {
-    g_autoptr (GBytes) data = g_resources_lookup_data ("/org/gnome/epiphany/hush.json", 0, NULL);
-    g_autofree char *filter_id = filter_info_identifier_for_source_uri ("org/gnome/epiphany/hush.json");
+    g_autoptr (GBytes) data = g_resources_lookup_data ("/io/github/armaniol/astrium/hush.json", 0, NULL);
+    g_autofree char *filter_id = filter_info_identifier_for_source_uri ("io/github/armaniol/astrium/hush.json");
     FilterInfo *filter_info = NULL;
 
-    filter_info = filter_info_new ("/org/gnome/epiphany/hush.json", manager);
+    filter_info = filter_info_new ("/io/github/armaniol/astrium/hush.json", manager);
     filter_info->identifier = g_steal_pointer (&filter_id);
     filter_info->index = i; /* already incremented by termination of the for loop */
     filter_info->is_hush = TRUE;

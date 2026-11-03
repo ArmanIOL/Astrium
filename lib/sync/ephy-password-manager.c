@@ -52,7 +52,7 @@ const SecretSchema *
 ephy_password_manager_get_password_schema (void)
 {
   static const SecretSchema schema = {
-    "org.epiphany.FormPassword", SECRET_SCHEMA_NONE,
+    "io.github.armaniol.astrium.FormPassword", SECRET_SCHEMA_NONE,
     {
       { ID_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { ORIGIN_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },

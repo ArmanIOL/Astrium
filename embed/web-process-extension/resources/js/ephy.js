@@ -167,7 +167,7 @@ Ephy.showGeneratePasswordFlyout = function(passwordElement) {
     iconSpan.className = 'ephy-dropdown-icon';
 
     const keyIcon = document.createElement('img');
-    keyIcon.src = 'ephy-resource:///org/gnome/epiphany/page-icons/password-generator.svg';
+    keyIcon.src = 'ephy-resource:///io/github/armaniol/astrium/page-icons/password-generator.svg';
     keyIcon.width = 16;
     keyIcon.height = 16;
     iconSpan.appendChild(keyIcon);
@@ -196,7 +196,7 @@ Ephy.showGeneratePasswordFlyout = function(passwordElement) {
     refreshBtn.title = Ephy._("Generate new password");
 
     const refreshIcon = document.createElement('img');
-    refreshIcon.src = 'ephy-resource:///org/gnome/epiphany/page-icons/password-generator-refresh.svg';
+    refreshIcon.src = 'ephy-resource:///io/github/armaniol/astrium/page-icons/password-generator-refresh.svg';
     refreshIcon.width = 14;
     refreshIcon.height = 14;
     refreshBtn.appendChild(refreshIcon);

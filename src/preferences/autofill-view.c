@@ -408,7 +408,7 @@ ephy_autofill_view_class_init (EphyAutoFillViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/autofill-view.ui");
+                                               "/io/github/armaniol/astrium/gtk/autofill-view.ui");
 
   object_class->dispose = ephy_autofill_view_dispose;
 

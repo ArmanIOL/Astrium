@@ -168,7 +168,7 @@ ephy_history_dialog_row_class_init (EphyHistoryDialogRowClass *klass)
   object_class->dispose = ephy_history_dialog_row_dispose;
   object_class->finalize = ephy_history_dialog_row_finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/history-dialog-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/io/github/armaniol/astrium/gtk/history-dialog-row.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialogRow, icon);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialogRow, check_button);

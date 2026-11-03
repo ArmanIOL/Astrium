@@ -186,7 +186,7 @@ readability_js_finish_cb (GObject      *object,
   encoded_title = ephy_encode_for_html (title);
 
   html = g_string_new (NULL);
-  style_css = g_resources_lookup_data ("/org/gnome/epiphany/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  style_css = g_resources_lookup_data ("/io/github/armaniol/astrium/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
 
   font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
                           g_settings_get_enum (EPHY_SETTINGS_READER,
@@ -251,7 +251,7 @@ ephy_reader_request_begin_get_source_from_web_view (EphyReaderRequest *request,
   gsize length;
   const char *script;
   g_autoptr (GError) error = NULL;
-  g_autoptr (GBytes) bytes = g_resources_lookup_data ("/org/gnome/epiphany/readability/Readability.js",
+  g_autoptr (GBytes) bytes = g_resources_lookup_data ("/io/github/armaniol/astrium/readability/Readability.js",
                                                       G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
 
   if (!bytes) {
@@ -262,7 +262,7 @@ ephy_reader_request_begin_get_source_from_web_view (EphyReaderRequest *request,
   script = (const char *)g_bytes_get_data (bytes, &length);
   webkit_web_view_evaluate_javascript (web_view, script, length,
                                        EPHY_READER_SCRIPT_WORLD_NAME,
-                                       "resource:///org/gnome/epiphany/readability/Readability.js",
+                                       "resource:///io/github/armaniol/astrium/readability/Readability.js",
                                        request->cancellable,
                                        readability_js_finish_cb,
                                        request);

@@ -125,7 +125,7 @@ ephy_passwords_view_class_init (EphyPasswordsViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/passwords-view.ui");
+                                               "/io/github/armaniol/astrium/gtk/passwords-view.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, data_view);

@@ -188,7 +188,7 @@ search_provider_sources = [
   search_provider_codegen
 ]
 
-executable('epiphany-search-provider',
+executable('astrium-search-provider',
   search_provider_sources,
   dependencies: ephymain_dep,
   install: true,
@@ -197,8 +197,8 @@ executable('epiphany-search-provider',
 )
 
 webapp_codegen = gnome.gdbus_codegen('ephy-webapp-provider-generated',
-  'webapp-provider/org.gnome.Epiphany.WebAppProvider.xml',
-  interface_prefix: 'org.gnome.Epiphany',
+  'webapp-provider/io.github.ArmanIOL.Astrium.WebAppProvider.xml',
+  interface_prefix: 'io.github.ArmanIOL.Astrium',
   namespace: 'Ephy'
 )
 
@@ -208,7 +208,7 @@ webapp_provider_sources = [
   webapp_codegen
 ]
 
-executable('epiphany-webapp-provider',
+executable('astrium-webapp-provider',
   webapp_provider_sources,
   dependencies: ephymain_dep,
   install: true,
@@ -219,13 +219,13 @@ executable('epiphany-webapp-provider',
 gresource_conf = configuration_data()
 gresource_conf.set('appid', application_id)
 resource_files = configure_file(
-  input: 'resources/epiphany.gresource.xml.in',
-  output: 'epiphany.gresource.xml',
+  input: 'resources/astrium.gresource.xml.in',
+  output: 'astrium.gresource.xml',
   configuration: gresource_conf
 )
-resources = gnome.compile_resources('epiphany-resources',
+resources = gnome.compile_resources('astrium-resources',
     resource_files,
-    c_name: 'epiphany',
+    c_name: 'astrium',
     dependencies: [blueprints, metainfo],
     source_dir: [
       'resources',
@@ -234,15 +234,15 @@ resources = gnome.compile_resources('epiphany-resources',
     ]
 )
 
-epiphany_sources = [
+astrium_sources = [
   'ephy-main.c',
   resources,
   highlightjs_resources,
   readability_resources
 ]
 
-epiphany = executable('epiphany',
-  epiphany_sources,
+astrium = executable('astrium',
+  astrium_sources,
   dependencies: ephymain_dep,
   install: true,
   install_rpath: pkglibdir

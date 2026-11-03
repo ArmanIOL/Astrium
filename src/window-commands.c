@@ -1143,7 +1143,7 @@ window_cmd_show_help (GSimpleAction *action,
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   /* https://gitlab.gnome.org/GNOME/gtk/-/issues/6135 */
   gtk_show_uri (GTK_WINDOW (user_data),
-                "help:epiphany",
+                "help:astrium",
                 GDK_CURRENT_TIME);
   G_GNUC_END_IGNORE_DEPRECATIONS
 }
@@ -1168,7 +1168,7 @@ window_cmd_show_about (GSimpleAction *action,
   guint length;
 
   key_file = g_key_file_new ();
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany/about.ini", 0, NULL);
+  bytes = g_resources_lookup_data ("/io/github/armaniol/astrium/about.ini", 0, NULL);
   if (!g_key_file_load_from_data (key_file, g_bytes_get_data (bytes, NULL), -1, 0, &error)) {
     g_warning ("Couldn't load about data: %s\n", error->message);
     g_error_free (error);
@@ -1222,19 +1222,20 @@ window_cmd_show_about (GSimpleAction *action,
     authors[author_index++] = g_strdup (contributors[index]);
   }
 
-  dialog = ADW_ABOUT_DIALOG (adw_about_dialog_new_from_appdata ("/org/gnome/Epiphany/org.gnome.Epiphany.metainfo.xml", NULL));
+  dialog = ADW_ABOUT_DIALOG (adw_about_dialog_new_from_appdata ("/io/github/armaniol/astrium/io.github.ArmanIOL.Astrium.metainfo.xml", NULL));
 
   if (g_str_equal (PROFILE, "Canary"))
-    adw_about_dialog_set_application_name (dialog, _("Epiphany Canary"));
+    adw_about_dialog_set_application_name (dialog, _("Astrium Canary"));
 #if TECH_PREVIEW
   else
-    adw_about_dialog_set_application_name (dialog, _("Epiphany Technology Preview"));
+    adw_about_dialog_set_application_name (dialog, _("Astrium Technology Preview"));
 #endif
 
   adw_about_dialog_set_version (dialog, VERSION);
   adw_about_dialog_set_copyright (dialog,
                                   "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                                  "Copyright © 2003–2026 The GNOME Web Developers");
+                                  "Copyright © 2003–2026 The GNOME Web Developers\n"
+                                  "Copyright © 2026 ArmanIOL");
 
   adw_about_dialog_set_debug_info (dialog, debug_info);
   adw_about_dialog_set_developers (dialog, (const char **)authors);
@@ -1808,7 +1809,7 @@ set_image_from_favicon (EphyApplicationDialogData *data)
   } else {
     g_autoptr (GBytes) bytes = NULL;
 
-    bytes = g_resources_lookup_data ("/org/gnome/epiphany/page-icons/web-app-icon-missing.svg",
+    bytes = g_resources_lookup_data ("/io/github/armaniol/astrium/page-icons/web-app-icon-missing.svg",
                                      G_RESOURCE_LOOKUP_FLAGS_NONE,
                                      NULL);
     g_assert (bytes);
