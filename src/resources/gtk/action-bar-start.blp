@@ -69,7 +69,8 @@ template $EphyActionBarStart: Box {
   Button combined_stop_reload_button {
     action-name: "toolbar.combined-stop-reload";
     icon-name: "view-refresh-symbolic";
-    visible: false;
+    tooltip-text: _("Reload");
+    visible: true;
 
     styles [
       "toolbar-button",
@@ -86,22 +87,6 @@ template $EphyActionBarStart: Box {
     action-name: "win.home";
     icon-name: "go-home-symbolic";
     tooltip-text: _("Homepage");
-
-    styles [
-      "toolbar-button",
-    ]
-
-    GestureClick {
-      button: 2;
-      pressed => $middle_click_pressed_cb();
-      released => $middle_click_released_cb();
-    }
-  }
-
-  Button new_tab_button {
-    action-name: "win.new-tab";
-    icon-name: "tab-new-symbolic";
-    tooltip-text: _("New Tab");
 
     styles [
       "toolbar-button",

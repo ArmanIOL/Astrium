@@ -28,12 +28,17 @@
 #include "ephy-embed.h"
 #include "ephy-web-view.h"
 
-#define MIN_TAB_WIDTH 46
+#define MIN_TAB_WIDTH 18
 #define MAX_TAB_WIDTH 240
 #define PINNED_TAB_WIDTH 44
 #define DRAG_THRESHOLD 4
-#define TAB_CLOSE_VISIBLE_WIDTH 80
-#define TAB_LABEL_VISIBLE_WIDTH 54
+/* Chrome keeps the close button at the trailing edge while there is room.
+ * Below this width it moves to the center and replaces the favicon on
+ * hover, so even very narrow tabs stay closable. */
+#define TAB_CLOSE_OVERLAY_WIDTH 52
+/* The close button is always visible on tabs wide enough for all of it. */
+#define TAB_CLOSE_ALWAYS_WIDTH 96
+#define TAB_LABEL_VISIBLE_WIDTH 60
 
 struct _EphyTabStrip {
   AdwBin parent_instance;
@@ -141,6 +146,9 @@ get_page_icon (AdwTabPage *page)
 }
 
 static void
+update_tab_leading (GtkWidget *tab);
+
+static void
 update_tab_state (EphyTabStrip *self,
                   AdwTabPage   *page,
                   GtkWidget    *tab)
@@ -162,6 +170,8 @@ update_tab_state (EphyTabStrip *self,
     gtk_widget_add_css_class (tab, "pinned");
   else
     gtk_widget_remove_css_class (tab, "pinned");
+
+  update_tab_leading (tab);
 
   gtk_widget_set_tooltip_text (tab, adw_tab_page_get_tooltip (page));
 }
@@ -286,6 +296,7 @@ ephy_tab_layout_allocate (GtkLayoutManager *manager,
                         &minimum, &natural, NULL, NULL);
 
     gtk_widget_allocate (child, MAX (width, minimum), height, baseline, NULL);
+
   }
 }
 
@@ -361,7 +372,7 @@ static void
 update_tab_widths (EphyTabStrip *self,
                    int           strip_width)
 {
-  int available, fixed_width, slot, extra, n;
+  int available, fixed_width, slot;
   guint n_tabs = 0, n_pinned = 0, n_normal, i;
 
   if (self->updating_widths || !self->view || !self->scrolled_window)
@@ -397,40 +408,59 @@ update_tab_widths (EphyTabStrip *self,
       return;
 
     slot = available / n_normal;
-    extra = available % n_normal;
   } else {
     slot = MAX_TAB_WIDTH + 2;
-    extra = 0;
   }
 
   self->updating_widths = TRUE;
 
-  n = 0;
   for (i = 0; i < n_tabs; i++) {
     AdwTabPage *page = adw_tab_view_get_nth_page (self->view, i);
     GtkWidget *tab = g_hash_table_lookup (self->tabs, page);
+    GtkWidget *box, *label, *close;
+    gboolean pinned, narrow, label_visible;
     int tab_width;
 
     if (!tab)
       continue;
 
-    if (adw_tab_page_get_pinned (page)) {
+    pinned = adw_tab_page_get_pinned (page);
+    if (pinned) {
       tab_width = PINNED_TAB_WIDTH;
     } else {
-      tab_width = slot + (n < extra ? 1 : 0) - 2;
-      tab_width = CLAMP (tab_width, MIN_TAB_WIDTH, MAX_TAB_WIDTH);
-      n++;
+      /* Every normal tab gets the same width. Leaving a couple of pixels
+       * unused at the end is better than making one tab 1px wider. */
+      tab_width = CLAMP (slot - 2, MIN_TAB_WIDTH, MAX_TAB_WIDTH);
     }
+
+    box = g_object_get_data (G_OBJECT (tab), "box");
+    label = g_object_get_data (G_OBJECT (tab), "label");
+    close = g_object_get_data (G_OBJECT (tab), "close");
+
+    narrow = !pinned && tab_width < TAB_CLOSE_OVERLAY_WIDTH;
+    label_visible = !pinned && tab_width >= TAB_LABEL_VISIBLE_WIDTH;
+
+    g_object_set_data (G_OBJECT (tab), "narrow", GINT_TO_POINTER (narrow));
 
     ephy_tab_set_fixed_width (EPHY_TAB (tab), tab_width);
 
-    /* Chrome drops the title and close button when tabs get too narrow. */
-    gtk_widget_set_visible (GTK_WIDGET (g_object_get_data (G_OBJECT (tab), "close")),
-                            tab_width >= TAB_CLOSE_VISIBLE_WIDTH);
-    gtk_widget_set_visible (GTK_WIDGET (g_object_get_data (G_OBJECT (tab), "label")),
-                            tab_width >= TAB_LABEL_VISIBLE_WIDTH);
-    gtk_widget_set_halign (GTK_WIDGET (g_object_get_data (G_OBJECT (tab), "box")),
-                           tab_width >= TAB_LABEL_VISIBLE_WIDTH ? GTK_ALIGN_FILL : GTK_ALIGN_CENTER);
+    gtk_widget_set_visible (close, !pinned && !narrow);
+    gtk_widget_set_visible (label, label_visible);
+    gtk_widget_set_halign (box, label_visible ? GTK_ALIGN_FILL : GTK_ALIGN_CENTER);
+
+    /* Keep the favicon next to the title while there is room, and use the
+     * leading stack for the centered close button only on narrow tabs.
+     * update_tab_leading decides which page to show. */
+    update_tab_leading (tab);
+
+    gtk_widget_set_margin_start (box, tab_width >= 80 ? 8 : (narrow ? 0 : 4));
+    gtk_widget_set_margin_end (box, tab_width >= 80 ? 4 : (narrow ? 0 : 2));
+    gtk_box_set_spacing (GTK_BOX (box), tab_width >= 80 ? 4 : 2);
+
+    if (tab_width >= TAB_CLOSE_ALWAYS_WIDTH)
+      gtk_widget_add_css_class (tab, "show-close");
+    else
+      gtk_widget_remove_css_class (tab, "show-close");
   }
 
   self->updating_widths = FALSE;
@@ -810,13 +840,54 @@ close_button_clicked_cb (EphyTabStrip *self,
 }
 
 static void
+update_tab_leading (GtkWidget *tab)
+{
+  GtkWidget *leading = g_object_get_data (G_OBJECT (tab), "leading");
+  gboolean narrow = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "narrow"));
+  gboolean hovered = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "hovered"));
+  gboolean active = gtk_widget_has_css_class (tab, "active");
+
+  if (!leading)
+    return;
+
+  /* Chrome shows a small close button in place of the favicon on narrow
+   * tabs. It stays visible on the selected tab and appears on hover for
+   * the others, so very narrow tabs are still closable. */
+  gtk_stack_set_visible_child_name (GTK_STACK (leading),
+                                    narrow && (hovered || active) ? "close" : "icon");
+}
+
+static void
+tab_motion_enter_cb (GtkEventControllerMotion *controller,
+                     double                    x,
+                     double                    y,
+                     EphyTabStrip             *self)
+{
+  GtkWidget *tab = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller));
+
+  g_object_set_data (G_OBJECT (tab), "hovered", GINT_TO_POINTER (TRUE));
+  update_tab_leading (tab);
+}
+
+static void
+tab_motion_leave_cb (GtkEventControllerMotion *controller,
+                     EphyTabStrip             *self)
+{
+  GtkWidget *tab = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (controller));
+
+  g_object_set_data (G_OBJECT (tab), "hovered", GINT_TO_POINTER (FALSE));
+  update_tab_leading (tab);
+}
+
+static void
 create_tab (EphyTabStrip *self,
             AdwTabPage   *page,
             GtkWidget   **out_tab)
 {
-  GtkWidget *tab, *box, *stack, *image, *spinner, *label, *close_button;
+  GtkWidget *tab, *box, *stack, *leading, *image, *spinner, *label;
+  GtkWidget *close_button, *close_center;
   GtkGesture *click, *middle_click, *right_click, *drag, *long_press;
-  GtkEventController *key_controller;
+  GtkEventController *key_controller, *motion;
   g_autoptr (GIcon) icon = NULL;
 
   tab = ephy_tab_new ();
@@ -834,7 +905,24 @@ create_tab (EphyTabStrip *self,
   stack = gtk_stack_new ();
   gtk_widget_set_valign (stack, GTK_ALIGN_CENTER);
   gtk_widget_set_size_request (stack, 16, 16);
-  gtk_box_append (GTK_BOX (box), stack);
+
+  /* On narrow tabs the favicon is replaced by a centered close button
+   * while the pointer is over the tab. */
+  leading = gtk_stack_new ();
+  gtk_stack_set_transition_type (GTK_STACK (leading), GTK_STACK_TRANSITION_TYPE_NONE);
+  gtk_widget_set_valign (leading, GTK_ALIGN_CENTER);
+  gtk_stack_add_named (GTK_STACK (leading), stack, "icon");
+
+  close_center = gtk_button_new_from_icon_name ("window-close-symbolic");
+  gtk_widget_add_css_class (close_center, "flat");
+  gtk_widget_add_css_class (close_center, "circular");
+  gtk_widget_add_css_class (close_center, "astrium-tab-close-center");
+  gtk_widget_set_valign (close_center, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (close_center, GTK_ALIGN_CENTER);
+  gtk_widget_set_tooltip_text (close_center, _("Close tab"));
+  gtk_stack_add_named (GTK_STACK (leading), close_center, "close");
+
+  gtk_box_append (GTK_BOX (box), leading);
 
   icon = get_page_icon (page);
   image = gtk_image_new_from_gicon (icon);
@@ -862,16 +950,27 @@ create_tab (EphyTabStrip *self,
   gtk_box_append (GTK_BOX (box), close_button);
 
   g_object_set_data (G_OBJECT (tab), "box", box);
+  g_object_set_data (G_OBJECT (tab), "leading", leading);
   g_object_set_data (G_OBJECT (tab), "stack", stack);
   g_object_set_data (G_OBJECT (tab), "image", image);
   g_object_set_data (G_OBJECT (tab), "spinner", spinner);
   g_object_set_data (G_OBJECT (tab), "label", label);
   g_object_set_data (G_OBJECT (tab), "close", close_button);
+  g_object_set_data (G_OBJECT (tab), "close-center", close_center);
   g_object_set_data (G_OBJECT (close_button), "page", page);
+  g_object_set_data (G_OBJECT (close_center), "page", page);
 
   g_signal_connect_object (close_button, "clicked",
                            G_CALLBACK (close_button_clicked_cb), self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (close_center, "clicked",
+                           G_CALLBACK (close_button_clicked_cb), self,
+                           G_CONNECT_SWAPPED);
+
+  motion = gtk_event_controller_motion_new ();
+  g_signal_connect_object (motion, "enter", G_CALLBACK (tab_motion_enter_cb), self, G_CONNECT_DEFAULT);
+  g_signal_connect_object (motion, "leave", G_CALLBACK (tab_motion_leave_cb), self, G_CONNECT_DEFAULT);
+  gtk_widget_add_controller (tab, motion);
 
   click = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), GDK_BUTTON_PRIMARY);

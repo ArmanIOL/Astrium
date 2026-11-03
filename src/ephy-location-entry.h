@@ -65,9 +65,6 @@ GListModel     *ephy_location_entry_get_model                  (EphyLocationEntr
 void            ephy_location_entry_set_model                  (EphyLocationEntry *entry,
                                                                 GListModel        *model);
 
-void            ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *self,
-                                                                             gboolean           loading);
-
 GtkWidget      *ephy_location_entry_get_site_menu_button      (EphyLocationEntry *self);
 
 gboolean        ephy_location_entry_has_focus                  (EphyLocationEntry *self);

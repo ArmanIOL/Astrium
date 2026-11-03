@@ -71,7 +71,6 @@ struct _EphyLocationEntry {
   GtkWidget *url_button;
   GtkWidget *url_button_label;
   GtkWidget *site_menu_button;
-  GtkWidget *combined_stop_reload_button;
   GtkWidget *progress_bar;
   GList *page_actions;
 
@@ -1219,7 +1218,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_model);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_view);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button_label);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, combined_stop_reload_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, progress_bar);
 
@@ -1596,23 +1594,6 @@ ephy_location_entry_set_model (EphyLocationEntry *self,
   gtk_single_selection_set_model (self->suggestions_model, model);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_MODEL]);
-}
-
-/* Translators: tooltip for the refresh button */
-static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload");
-
-void
-ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *self,
-                                                             gboolean           loading)
-{
-  if (loading) {
-    gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button), "process-stop-symbolic");
-    /* Translators: tooltip for the stop button */
-    gtk_widget_set_tooltip_text (self->combined_stop_reload_button, _("Stop"));
-  } else {
-    gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button), "view-refresh-symbolic");
-    gtk_widget_set_tooltip_text (self->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
-  }
 }
 
 GtkWidget *

@@ -44,7 +44,6 @@ struct _EphyActionBarStart {
   GtkWidget *navigation_forward;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *homepage_button;
-  GtkWidget *new_tab_button;
   GtkWidget *site_menu_button;
   GtkWidget *placeholder;
 
@@ -412,8 +411,6 @@ middle_click_released_cb (GtkGesture         *gesture,
     action_name = "duplicate-tab";
   else if (widget == action_bar_start->homepage_button)
     action_name = "homepage-new-tab";
-  else if (widget == action_bar_start->new_tab_button)
-    action_name = "new-tab-from-clipboard";
   else
     g_assert_not_reached ();
 
@@ -455,18 +452,6 @@ ephy_action_bar_start_dispose (GObject *object)
 }
 
 static void
-update_new_tab_button_visibility (EphyActionBarStart *action_bar_start)
-{
-  EphyEmbedShell *embed_shell;
-
-  embed_shell = ephy_embed_shell_get_default ();
-
-  gtk_widget_set_visible (action_bar_start->new_tab_button,
-                          (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION) &&
-                          !is_desktop_pantheon ());
-}
-
-static void
 ephy_action_bar_start_constructed (GObject *object)
 {
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (object);
@@ -494,8 +479,6 @@ ephy_action_bar_start_constructed (GObject *object)
   }
 
   /* New Tab Button */
-  update_new_tab_button_visibility (action_bar_start);
-
   if (ephy_profile_dir_is_web_application ()) {
     GtkWidget *navigation_box = ephy_action_bar_start_get_navigation_box (action_bar_start);
 
@@ -530,9 +513,6 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         homepage_button);
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBarStart,
-                                        new_tab_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         site_menu_button);
@@ -598,12 +578,11 @@ ephy_action_bar_start_set_adaptive_mode (EphyActionBarStart *action_bar,
                                          EphyAdaptiveMode    adaptive_mode)
 {
   GValue val = G_VALUE_INIT;
-  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   g_value_init (&val, G_TYPE_INT);
 
-  gtk_widget_set_visible (action_bar->new_tab_button, adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
-  gtk_widget_set_visible (action_bar->combined_stop_reload_button, mode == EPHY_EMBED_SHELL_MODE_APPLICATION && adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
+  gtk_widget_set_visible (action_bar->combined_stop_reload_button,
+                          adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
 
   if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
     g_value_set_int (&val, 42);

@@ -310,20 +310,24 @@ progressbar.progress-indicator > trough > progress {
 
 .astrium-tab {
   min-height: 34px;
-  border-radius: 8px 8px 0 0;
-  margin: 3px 1px 0;
-  background: alpha(@window_fg_color, 0.02);
-  color: alpha(@window_fg_color, 0.85);
+  border-radius: 9px 9px 0 0;
+  margin: 4px 1px 0;
+  background: transparent;
+  /* Chrome separates adjacent inactive tabs with a hairline instead of
+   * drawing a full card behind each one. */
+  box-shadow: inset -1px 0 0 alpha(@window_fg_color, 0.07);
+  color: alpha(@window_fg_color, 0.72);
   transition: background 120ms ease-out, color 120ms ease-out;
 }
 
 .astrium-tab:hover {
-  background: alpha(@window_fg_color, 0.08);
+  background: alpha(@window_fg_color, 0.06);
+  box-shadow: none;
   color: @window_fg_color;
 }
 
 .astrium-tab.active {
-  background: mix(@headerbar_bg_color, white, 0.04);
+  background: mix(@headerbar_bg_color, white, 0.06);
   color: @headerbar_fg_color;
   /* Outline the top and sides, but not the bottom: the active tab should
    * merge with the toolbar below it, like in Chrome. */
@@ -346,23 +350,53 @@ progressbar.progress-indicator > trough > progress {
 }
 
 .astrium-tab .astrium-tab-close {
-  min-width: 18px;
-  min-height: 18px;
-  padding: 3px;
-  margin: 0 0 0 2px;
+  min-width: 16px;
+  min-height: 16px;
+  padding: 1px;
+  margin: 0;
   border-radius: 999px;
+  color: alpha(@window_fg_color, 0.7);
   opacity: 0;
   transition: opacity 120ms ease-out, background 120ms ease-out;
 }
 
 .astrium-tab:hover .astrium-tab-close,
 .astrium-tab.active .astrium-tab-close,
-.astrium-tab:focus-within .astrium-tab-close {
+.astrium-tab:focus-within .astrium-tab-close,
+.astrium-tab.show-close .astrium-tab-close {
   opacity: 1;
 }
 
-.astrium-tab .astrium-tab-close:hover {
+.astrium-tab:hover .astrium-tab-close,
+.astrium-tab.show-close .astrium-tab-close {
+  color: @window_fg_color;
+}
+
+.astrium-tab.active .astrium-tab-close {
+  color: @headerbar_fg_color;
+}
+
+.astrium-tab .astrium-tab-close:hover,
+.astrium-tab .astrium-tab-close-center:hover {
   background: alpha(@window_fg_color, 0.14);
+}
+
+/* Centered close button shown in place of the favicon on narrow tabs. */
+.astrium-tab .astrium-tab-close-center {
+  min-width: 16px;
+  min-height: 16px;
+  padding: 0;
+  border-radius: 999px;
+  color: alpha(@window_fg_color, 0.7);
+  -gtk-icon-size: 12px;
+}
+
+.astrium-tab:hover .astrium-tab-close-center {
+  color: @window_fg_color;
+}
+
+.astrium-tab.active .astrium-tab-close-center {
+  color: @headerbar_fg_color;
 }
 
 .astrium-tab-strip-button {

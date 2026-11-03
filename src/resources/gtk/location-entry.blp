@@ -45,21 +45,6 @@ template $EphyLocationEntry: Box {
             ]
           }
 
-          [end]
-          Button combined_stop_reload_button {
-            action-name: "toolbar.combined-stop-reload";
-            icon-name: "view-refresh-symbolic";
-
-            styles [
-              "entry-icon",
-            ]
-
-            GestureClick {
-              button: 2;
-              pressed => $middle_click_pressed_cb();
-              released => $middle_click_released_cb();
-            }
-          }
         }
 
         [overlay]
