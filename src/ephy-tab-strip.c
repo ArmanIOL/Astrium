@@ -196,10 +196,8 @@ update_tab_contents (EphyTabStrip *self,
 static void
 update_tab_widths (EphyTabStrip *self)
 {
-  GtkAdjustment *adjustment;
-  double available;
-  guint n_tabs = 0, n_pinned = 0, i;
-  int width;
+  int available, width, fixed_width;
+  guint n_tabs = 0, n_pinned = 0, n_normal, i;
   GHashTableIter iter;
   gpointer key, value;
 
@@ -214,14 +212,25 @@ update_tab_widths (EphyTabStrip *self)
     if (adw_tab_page_get_pinned (adw_tab_view_get_nth_page (self->view, i)))
       n_pinned++;
 
-  if (self->expand) {
-    adjustment = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (self->scrolled_window));
-    available = gtk_adjustment_get_page_size (adjustment);
+  n_normal = n_tabs - n_pinned;
+
+  if (self->expand && n_normal > 0) {
+    /* The strip is laid out as:
+     * [ 8px ][tabs][4][+][4][search][4][spacer][4][window controls]
+     * so tabs get whatever is left after the fixed widgets. */
+    fixed_width = 8 + 8 /* slop for css margins */
+                  + gtk_widget_get_width (self->new_tab_button)
+                  + gtk_widget_get_width (self->tab_search_button)
+                  + gtk_widget_get_width (self->window_controls)
+                  + 4 * 4; /* box spacing */
+
+    available = gtk_widget_get_width (GTK_WIDGET (self)) - fixed_width;
+    available -= n_pinned * (PINNED_TAB_WIDTH + 2);
 
     if (available <= 0)
       return;
 
-    width = (int)(available / MAX (n_tabs - n_pinned, 1));
+    width = available / n_normal - 2;
     width = CLAMP (width, MIN_TAB_WIDTH, MAX_TAB_WIDTH);
   } else {
     width = MAX_TAB_WIDTH;
@@ -242,6 +251,19 @@ update_tab_widths (EphyTabStrip *self)
   }
 
   self->updating_widths = FALSE;
+}
+
+static void
+ephy_tab_strip_size_allocate (GtkWidget *widget,
+                              int        width,
+                              int        height,
+                              int        baseline)
+{
+  EphyTabStrip *self = EPHY_TAB_STRIP (widget);
+
+  GTK_WIDGET_CLASS (ephy_tab_strip_parent_class)->size_allocate (widget, width, height, baseline);
+
+  update_tab_widths (self);
 }
 
 /* Tab search */
@@ -848,8 +870,10 @@ static void
 ephy_tab_strip_class_init (EphyTabStripClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ephy_tab_strip_dispose;
+  widget_class->size_allocate = ephy_tab_strip_size_allocate;
 
   signals[SIGNAL_EXTRA_DRAG_DROP] =
     g_signal_new ("extra-drag-drop",
@@ -881,7 +905,8 @@ ephy_tab_strip_init (EphyTabStrip *self)
   self->scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (self->scrolled_window),
                                   GTK_POLICY_EXTERNAL, GTK_POLICY_NEVER);
-  gtk_widget_set_hexpand (self->scrolled_window, TRUE);
+  gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (self->scrolled_window), TRUE);
+  gtk_widget_set_hexpand (self->scrolled_window, FALSE);
   gtk_widget_set_valign (self->scrolled_window, GTK_ALIGN_FILL);
   gtk_widget_set_margin_start (self->scrolled_window, 8);
   gtk_box_append (GTK_BOX (self->box), self->scrolled_window);
